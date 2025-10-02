@@ -1,0 +1,2544 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Finanças - Controle Financeiro Pessoal</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563eb">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Finanças">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💰</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            color: #333;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 10px;
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo h1 {
+            color: #2563eb;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 700;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: clamp(11px, 2.5vw, 14px);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            touch-action: manipulation;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-btn:hover,
+        .nav-btn:active {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .nav-btn.active {
+            background: #1e40af;
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+        }
+
+        .page {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            min-height: calc(100vh - 140px);
+            margin-bottom: 20px;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .page-title {
+            color: #2563eb;
+            font-size: clamp(1.5rem, 5vw, 2rem);
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .welcome-section {
+            text-align: center;
+            padding: 40px 15px;
+        }
+
+        .welcome-icon {
+            font-size: clamp(4rem, 12vw, 6rem);
+            margin-bottom: 20px;
+        }
+
+        .welcome-text {
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .action-btn {
+            background: linear-gradient(45deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: clamp(14px, 3vw, 16px);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            touch-action: manipulation;
+            min-height: 44px;
+        }
+
+        .action-btn:hover,
+        .action-btn:active {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #374151;
+            font-weight: 500;
+            font-size: clamp(14px, 3vw, 16px);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: clamp(14px, 3.5vw, 16px);
+            transition: border-color 0.3s ease;
+            background: white;
+            -webkit-appearance: none;
+            appearance: none;
+            min-height: 44px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: clamp(14px, 3vw, 16px);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn:hover,
+        .btn:active {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .btn-danger {
+            background: #dc2626;
+        }
+
+        .btn-danger:hover,
+        .btn-danger:active {
+            background: #b91c1c;
+        }
+
+        .btn-success {
+            background: #10b981;
+        }
+
+        .btn-success:hover,
+        .btn-success:active {
+            background: #059669;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e7eb;
+        }
+
+        .card h3 {
+            color: #2563eb;
+            margin-bottom: 15px;
+            font-size: clamp(1.1rem, 4vw, 1.3rem);
+        }
+
+        .transaction-list {
+            max-height: 350px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+            transition: background-color 0.3s ease;
+            min-height: 60px;
+        }
+
+        .transaction-item:hover,
+        .transaction-item:active {
+            background-color: #f9fafb;
+        }
+
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .transaction-date {
+            font-size: clamp(11px, 2.5vw, 12px);
+            color: #6b7280;
+        }
+
+        .transaction-desc {
+            font-weight: 500;
+            margin: 4px 0;
+            font-size: clamp(13px, 3vw, 14px);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .transaction-category {
+            font-size: clamp(11px, 2.5vw, 12px);
+            color: #6b7280;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .transaction-amount {
+            font-weight: 600;
+            font-size: clamp(14px, 3.5vw, 16px);
+            margin: 0 8px;
+            white-space: nowrap;
+        }
+
+        .amount-positive {
+            color: #10b981;
+        }
+
+        .amount-negative {
+            color: #dc2626;
+        }
+
+        .transaction-actions {
+            display: flex;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+            touch-action: manipulation;
+            min-width: 36px;
+            min-height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-btn:hover,
+        .icon-btn:active {
+            background-color: #f3f4f6;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .quota-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid #2563eb;
+        }
+
+        .quota-card.positive {
+            border-left-color: #10b981;
+        }
+
+        .quota-card.negative {
+            border-left-color: #dc2626;
+        }
+
+        .quota-card.warning {
+            border-left-color: #f59e0b;
+        }
+
+        .quota-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            min-height: 36px;
+        }
+
+        .quota-name {
+            font-weight: 600;
+            color: #374151;
+            font-size: clamp(14px, 3.5vw, 16px);
+        }
+
+        .quota-progress {
+            width: 100%;
+            height: 8px;
+            background-color: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .quota-progress-bar {
+            height: 100%;
+            background-color: #2563eb;
+            transition: width 0.3s ease;
+        }
+
+        .quota-progress-bar.positive {
+            background-color: #10b981;
+        }
+
+        .quota-progress-bar.negative {
+            background-color: #dc2626;
+        }
+
+        .quota-progress-bar.warning {
+            background-color: #f59e0b;
+        }
+
+        .quota-amounts {
+            display: flex;
+            justify-content: space-between;
+            font-size: clamp(12px, 3vw, 14px);
+        }
+
+        .account-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .account-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e7eb;
+        }
+
+        .account-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            min-height: 36px;
+        }
+
+        .account-name {
+            font-size: clamp(1.1rem, 4vw, 1.2rem);
+            font-weight: 600;
+            color: #2563eb;
+        }
+
+        .account-balance {
+            font-size: clamp(1.3rem, 5vw, 1.5rem);
+            font-weight: 700;
+        }
+
+        .account-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            max-height: 80vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            color: #2563eb;
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
+            font-weight: 600;
+        }
+
+        .close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+            min-width: 36px;
+            min-height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: manipulation;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1001;
+            max-width: calc(100vw - 40px);
+            font-size: clamp(14px, 3vw, 16px);
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            background: #dc2626;
+        }
+
+        .chart-container {
+            margin: 20px 0;
+            height: 250px;
+            position: relative;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-value {
+            font-size: clamp(1.5rem, 5vw, 2rem);
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: clamp(12px, 3vw, 14px);
+        }
+
+        .autocomplete-container {
+            position: relative;
+        }
+
+        .autocomplete-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            z-index: 100;
+            display: none;
+        }
+
+        .autocomplete-suggestion {
+            padding: 12px;
+            cursor: pointer;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: clamp(14px, 3vw, 16px);
+            touch-action: manipulation;
+        }
+
+        .autocomplete-suggestion:hover,
+        .autocomplete-suggestion:active {
+            background-color: #f9fafb;
+        }
+
+        .autocomplete-suggestion:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-arrow {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: #6b7280;
+        }
+
+        .config-section {
+            margin-bottom: 25px;
+        }
+
+        .config-section h3 {
+            color: #2563eb;
+            margin-bottom: 15px;
+            font-size: clamp(1.1rem, 4vw, 1.3rem);
+        }
+
+        .config-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .config-item {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 60px;
+        }
+
+        .config-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .config-item-name {
+            font-weight: 500;
+            margin-bottom: 4px;
+            font-size: clamp(14px, 3.5vw, 16px);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .config-item-desc {
+            font-size: clamp(12px, 2.5vw, 13px);
+            color: #6b7280;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Mobile specific styles */
+        @media (max-width: 768px) {
+            .container {
+                padding: 8px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 12px;
+                padding: 12px;
+                position: relative;
+                top: 0;
+            }
+
+            .nav-buttons {
+                width: 100%;
+                justify-content: space-around;
+                flex-wrap: wrap;
+                gap: 4px;
+            }
+
+            .nav-btn {
+                flex: 1;
+                min-width: 0;
+                padding: 8px 4px;
+                font-size: 11px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .modal-content {
+                margin: 2% auto;
+                width: 95%;
+                padding: 15px;
+                max-height: 90vh;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .account-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .transaction-item {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px;
+            }
+
+            .transaction-amount {
+                margin: 5px 0;
+                align-self: flex-end;
+            }
+
+            .transaction-actions {
+                align-self: flex-end;
+                margin-top: 5px;
+            }
+
+            .quota-amounts {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .config-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .config-item > div:last-child {
+                align-self: flex-end;
+            }
+        }
+
+        /* iPhone X and newer safe areas */
+        @supports (padding: max(0px)) {
+            .container {
+                padding-left: max(10px, env(safe-area-inset-left));
+                padding-right: max(10px, env(safe-area-inset-right));
+                padding-bottom: max(20px, env(safe-area-inset-bottom));
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: linear-gradient(135deg, #1e3a8a 0%, #581c87 100%);
+            }
+        }
+
+        /* High contrast mode */
+        @media (prefers-contrast: high) {
+            .btn,
+            .nav-btn {
+                border: 2px solid currentColor;
+            }
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .nav-buttons,
+            .action-buttons {
+                display: none;
+            }
+            
+            .page {
+                display: block !important;
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <span style="font-size: 2rem;">💰</span>
+                <h1>Finanças</h1>
+            </div>
+            <nav class="nav-buttons">
+                <button class="nav-btn active" onclick="showPage('home')" data-page="home">🏠 Início</button>
+                <button class="nav-btn" onclick="showPage('transactions')" data-page="transactions">💸 Movimentações</button>
+                <button class="nav-btn" onclick="showPage('quotas')" data-page="quotas">📊 Cotas</button>
+                <button class="nav-btn" onclick="showPage('accounts')" data-page="accounts">🏦 Contas</button>
+                <button class="nav-btn" onclick="showPage('history')" data-page="history">📈 Histórico</button>
+                <button class="nav-btn" onclick="showPage('settings')" data-page="settings">⚙️ Config</button>
+            </nav>
+        </header>
+
+        <!-- Página Inicial -->
+        <main id="home" class="page active">
+            <div class="welcome-section">
+                <div class="welcome-icon">💰</div>
+                <h2 class="page-title">Bem-vindo ao Finanças</h2>
+                <p class="welcome-text">
+                    Seu assistente pessoal para controle financeiro completo.<br>
+                    Gerencie suas receitas, despesas, contas bancárias e cotas de gastos<br>
+                    de forma simples e intuitiva.
+                </p>
+                
+                <div class="action-buttons">
+                    <button class="action-btn" onclick="saveData()">
+                        💾 Salvar Dados
+                    </button>
+                    <button class="action-btn" onclick="exportData()">
+                        📤 Exportar Dados
+                    </button>
+                    <button class="action-btn" onclick="importData()">
+                        📥 Importar Dados
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Página de Movimentações -->
+        <main id="transactions" class="page">
+            <h2 class="page-title">Movimentações Financeiras</h2>
+            
+            <div class="card">
+                <h3>Nova Movimentação</h3>
+                <form id="transactionForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="transactionType">Tipo</label>
+                            <select id="transactionType" required>
+                                <option value="">Selecione o tipo</option>
+                                <option value="income">Receita</option>
+                                <option value="expense">Despesa</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="transactionCategory">Categoria</label>
+                            <select id="transactionCategory" required>
+                                <option value="">Selecione a categoria</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group" id="subcategoryGroup" style="display: none;">
+                            <label for="transactionSubcategory">Subcategoria</label>
+                            <select id="transactionSubcategory">
+                                <option value="">Selecione a subcategoria</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="customSubcategoryGroup" style="display: none;">
+                            <label for="customSubcategory">Subcategoria Personalizada</label>
+                            <input type="text" id="customSubcategory" placeholder="Digite a subcategoria">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="transactionAmount">Valor (R$)</label>
+                            <input type="number" id="transactionAmount" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="transactionDate">Data</label>
+                            <input type="date" id="transactionDate" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="transactionAccount">Conta</label>
+                            <select id="transactionAccount" required>
+                                <option value="">Selecione a conta</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="transactionQuota">Cota (opcional)</label>
+                            <select id="transactionQuota">
+                                <option value="">Nenhuma cota</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="transactionDescription">Descrição</label>
+                        <input type="text" id="transactionDescription" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="isRecurring">
+                            <input type="checkbox" id="isRecurring"> Movimentação recorrente
+                        </label>
+                    </div>
+                    
+                    <div id="recurringOptions" style="display: none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="recurringFrequency">Frequência</label>
+                                <select id="recurringFrequency">
+                                    <option value="daily">Diário</option>
+                                    <option value="weekly">Semanal</option>
+                                    <option value="biweekly">Quinzenal</option>
+                                    <option value="monthly">Mensal</option>
+                                    <option value="quarterly">Trimestral</option>
+                                    <option value="semiannual">Semestral</option>
+                                    <option value="annual">Anual</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="recurringEndDate">Data de término (opcional)</label>
+                                <input type="date" id="recurringEndDate">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success">Adicionar Movimentação</button>
+                </form>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 20px;">
+                <div class="card">
+                    <h3>Últimas Movimentações</h3>
+                    <div id="recentTransactions" class="transaction-list"></div>
+                </div>
+                
+                <div class="card">
+                    <h3>Lançamentos Futuros</h3>
+                    <div id="futureTransactions" class="transaction-list"></div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Página de Cotas -->
+        <main id="quotas" class="page">
+            <h2 class="page-title">Dashboard de Cotas Mensais</h2>
+            
+            <div class="card">
+                <h3>Nova Cota</h3>
+                <form id="quotaForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="quotaName">Nome da Cota</label>
+                            <div class="autocomplete-container">
+                                <input type="text" id="quotaName" required autocomplete="off">
+                                <span class="dropdown-arrow">▼</span>
+                                <div id="quotaNameSuggestions" class="autocomplete-suggestions"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="quotaAmount">Valor da Cota (R$)</label>
+                            <input type="number" id="quotaAmount" step="0.01" min="0" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="quotaStartDate">Data de Início</label>
+                            <input type="date" id="quotaStartDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="quotaEndDate">Data de Término</label>
+                            <input type="date" id="quotaEndDate" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success">Criar Cota</button>
+                </form>
+            </div>
+            
+            <div id="quotasGrid" class="dashboard-grid"></div>
+        </main>
+
+        <!-- Página de Contas -->
+        <main id="accounts" class="page">
+            <h2 class="page-title">Contas Bancárias</h2>
+            
+            <div class="card">
+                <h3>Nova Conta</h3>
+                <form id="accountForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="accountName">Nome da Conta</label>
+                            <input type="text" id="accountName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="accountBank">Banco</label>
+                            <input type="text" id="accountBank" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="accountType">Tipo de Conta</label>
+                            <select id="accountType" required>
+                                <option value="checking">Conta Corrente</option>
+                                <option value="savings">Poupança</option>
+                                <option value="investment">Investimento</option>
+                                <option value="credit">Cartão de Crédito</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="accountBalance">Saldo Inicial (R$)</label>
+                            <input type="number" id="accountBalance" step="0.01" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success">Adicionar Conta</button>
+                </form>
+            </div>
+            
+            <div id="accountsGrid" class="account-grid"></div>
+        </main>
+
+        <!-- Página de Histórico -->
+        <main id="history" class="page">
+            <h2 class="page-title">Histórico Completo</h2>
+            
+            <div class="card">
+                <h3>Filtros</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="filterStartDate">Data de Início</label>
+                        <input type="date" id="filterStartDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="filterEndDate">Data de Término</label>
+                        <input type="date" id="filterEndDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="filterType">Tipo</label>
+                        <select id="filterType">
+                            <option value="">Todos</option>
+                            <option value="income">Receitas</option>
+                            <option value="expense">Despesas</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filterAccount">Conta</label>
+                        <select id="filterAccount">
+                            <option value="">Todas as contas</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn" onclick="applyFilters()">Aplicar Filtros</button>
+                <button class="btn" onclick="clearFilters()">Limpar Filtros</button>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalIncome">R$ 0,00</div>
+                    <div class="stat-label">Total de Receitas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalExpenses">R$ 0,00</div>
+                    <div class="stat-label">Total de Despesas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="netBalance">R$ 0,00</div>
+                    <div class="stat-label">Saldo Líquido</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="transactionCount">0</div>
+                    <div class="stat-label">Total de Transações</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Todas as Movimentações</h3>
+                <div id="allTransactions" class="transaction-list"></div>
+            </div>
+        </main>
+
+        <!-- Página de Configurações -->
+        <main id="settings" class="page">
+            <h2 class="page-title">Configurações</h2>
+            
+            <div class="config-section">
+                <h3>Gerenciar Movimentações</h3>
+                <div class="card">
+                    <div class="config-grid" id="configTransactions"></div>
+                </div>
+            </div>
+            
+            <div class="config-section">
+                <h3>Gerenciar Categorias e Subcategorias</h3>
+                <div class="card">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="categoryType">Tipo de Categoria</label>
+                            <select id="categoryType">
+                                <option value="income">Receitas</option>
+                                <option value="expense">Despesas</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="newCategory">Nova Categoria</label>
+                            <input type="text" id="newCategory" placeholder="Digite o nome da categoria">
+                        </div>
+                    </div>
+                    <button class="btn btn-success" onclick="addCustomCategory()">Adicionar Categoria</button>
+                    
+                    <div id="categoriesList" class="config-grid" style="margin-top: 20px;"></div>
+                </div>
+            </div>
+            
+            <div class="config-section">
+                <h3>Gerenciar Cotas</h3>
+                <div class="card">
+                    <div class="config-grid" id="configQuotas"></div>
+                </div>
+            </div>
+            
+            <div class="config-section">
+                <h3>Gerenciar Contas</h3>
+                <div class="card">
+                    <div class="config-grid" id="configAccounts"></div>
+                </div>
+            </div>
+            
+            <div class="config-section">
+                <h3>Backup e Restauração</h3>
+                <div class="card">
+                    <div class="config-grid">
+                        <div class="config-item">
+                            <div class="config-item-info">
+                                <div class="config-item-name">Backup Completo</div>
+                                <div class="config-item-desc">Exportar todos os dados em formato JSON</div>
+                            </div>
+                            <button class="btn" onclick="exportData()">Exportar</button>
+                        </div>
+                        <div class="config-item">
+                            <div class="config-item-info">
+                                <div class="config-item-name">Restaurar Backup</div>
+                                <div class="config-item-desc">Importar dados de arquivo JSON</div>
+                            </div>
+                            <button class="btn" onclick="importData()">Importar</button>
+                        </div>
+                        <div class="config-item">
+                            <div class="config-item-info">
+                                <div class="config-item-name">Limpar Dados</div>
+                                <div class="config-item-desc">Remover todos os dados do aplicativo</div>
+                            </div>
+                            <button class="btn btn-danger" onclick="clearAllData()">Limpar Tudo</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal para Edição -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Editar Item</h3>
+                <button class="close" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="editModalBody"></div>
+        </div>
+    </div>
+
+    <!-- Toast para Notificações -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Input para Importar Arquivo -->
+    <input type="file" id="fileInput" accept=".json" style="display: none;">
+
+    <script>
+        // Dados da aplicação
+        let appData = {
+            transactions: [],
+            accounts: [],
+            quotas: [],
+            categories: {
+                income: [
+                    'Salário', 'Investimentos', 'Autônomo / Freelance', 'Empreendimento', 
+                    'Benefícios', 'Aluguéis / Patrimônio', 'Restituições', 'Outras receitas'
+                ],
+                expense: [
+                    'Alimentação', 'Habitação / Moradia', 'Transporte', 'Saúde', 'Educação',
+                    'Lazer e Cultura', 'Vestuário e Cuidados Pessoais', 'Pagamentos Financeiros',
+                    'Seguros', 'Impostos e Taxas', 'Doações e Caridade', 'Outras despesas'
+                ]
+            },
+            subcategories: {
+                income: {
+                    'Salário': ['Emprego principal', 'Horas extras', '13º salário', 'Férias', 'Outras'],
+                    'Investimentos': ['Juros (CDB, Tesouro, etc.)', 'Dividendos (ações)', 'Fundos imobiliários', 'Criptomoedas', 'Outras'],
+                    'Autônomo / Freelance': ['Serviços prestados', 'Consultorias', 'Projetos', 'Outras'],
+                    'Empreendimento': ['Venda de produtos', 'Venda de serviços', 'Licenciamento', 'Outras'],
+                    'Benefícios': ['Aposentadoria / INSS', 'Pensão', 'Bolsa / Auxílio governamental', 'Seguro desemprego', 'Outras'],
+                    'Aluguéis / Patrimônio': ['Aluguel de imóveis', 'Aluguel de veículos / equipamentos', 'Direitos autorais', 'Outras'],
+                    'Restituições': ['Imposto de Renda', 'Reembolsos (empresa, saúde, seguro, etc.)', 'Outras'],
+                    'Outras receitas': ['Presentes', 'Doações recebidas', 'Prêmios / sorteios', 'Outras']
+                },
+                expense: {
+                    'Alimentação': ['Supermercado', 'Feira / Hortifruti', 'Padaria', 'Restaurante', 'Lanche / Fast food', 'Delivery', 'Outras'],
+                    'Habitação / Moradia': ['Aluguel', 'Financiamento / Prestação', 'Condomínio', 'Energia elétrica', 'Água / Esgoto', 'Gás', 'Internet / TV / Telefone fixo', 'Manutenção da casa', 'Outras'],
+                    'Transporte': ['Combustível', 'Transporte público (ônibus, metrô, trem)', 'Uber / Táxi / Aplicativos', 'Estacionamento / Pedágio', 'Manutenção do veículo', 'Seguro do veículo', 'IPVA / Licenciamento', 'Outras'],
+                    'Saúde': ['Plano de saúde', 'Consultas médicas', 'Exames', 'Farmácia / Remédios', 'Academia / Atividade física', 'Terapias', 'Outras'],
+                    'Educação': ['Escola / Faculdade', 'Cursos / Especializações', 'Livros / Material didático', 'Outras'],
+                    'Lazer e Cultura': ['Cinema / Teatro / Shows', 'Viagem', 'Passeios', 'Restaurantes', 'Assinaturas (Netflix, Spotify, etc.)', 'Hobbies', 'Outras'],
+                    'Vestuário e Cuidados Pessoais': ['Roupas', 'Calçados', 'Acessórios', 'Salão / Barbearia / Estética', 'Cosméticos / Perfumaria', 'Outras'],
+                    'Pagamentos Financeiros': ['Tarifas bancárias', 'Juros / Multas', 'Empréstimos', 'Cartão de crédito', 'Financiamentos', 'Outras'],
+                    'Seguros': ['Vida', 'Residência', 'Veículo', 'Saúde suplementar', 'Outras'],
+                    'Impostos e Taxas': ['IPTU', 'IPVA', 'Imposto de Renda a pagar', 'Taxa de Bombeiros', 'Taxas diversas (cartório, etc.)', 'Outras'],
+                    'Doações e Caridade': ['Igrejas', 'ONGs', 'Ações sociais', 'Outras'],
+                    'Outras despesas': ['Presentes', 'Animais de estimação (ração, veterinário, banho/tosa)', 'Reparos emergenciais', 'Multas diversas', 'Outras']
+                }
+            }
+        };
+
+        // Inicialização da aplicação
+        document.addEventListener('DOMContentLoaded', function() {
+            // Prevenir zoom no iOS
+            document.addEventListener('gesturestart', function (e) {
+                e.preventDefault();
+            });
+            
+            // Melhorar performance em dispositivos touch
+            if ('ontouchstart' in window) {
+                document.body.style.cursor = 'pointer';
+            }
+            
+            loadData();
+            updateCategories();
+            updateAccountOptions();
+            updateQuotaOptions();
+            updateFilterOptions();
+            updateTransactionDisplay();
+            updateQuotasDisplay();
+            updateAccountsDisplay();
+            updateHistoryDisplay();
+            updateSettingsDisplay();
+            setupQuotaNameAutocomplete();
+            
+            // Event listeners
+            document.getElementById('transactionType').addEventListener('change', updateCategories);
+            document.getElementById('transactionCategory').addEventListener('change', updateSubcategories);
+            document.getElementById('transactionSubcategory').addEventListener('change', handleSubcategoryChange);
+            document.getElementById('isRecurring').addEventListener('change', toggleRecurringOptions);
+            document.getElementById('transactionForm').addEventListener('submit', addTransaction);
+            document.getElementById('accountForm').addEventListener('submit', addAccount);
+            document.getElementById('quotaForm').addEventListener('submit', addQuota);
+            document.getElementById('fileInput').addEventListener('change', handleFileImport);
+            document.getElementById('categoryType').addEventListener('change', updateCategoriesListDisplay);
+            
+            // Definir data atual como padrão
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('transactionDate').value = today;
+            document.getElementById('quotaStartDate').value = today;
+            
+            // Definir data final da cota como último dia do mês
+            const lastDayOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).toISOString().split('T')[0];
+            document.getElementById('quotaEndDate').value = lastDayOfMonth;
+            
+            // Verificar movimentações recorrentes
+            checkRecurringTransactions();
+            
+            // Detectar se está rodando como PWA
+            if (window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches) {
+                document.body.classList.add('pwa-mode');
+            }
+        });
+
+        // Navegação entre páginas
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(pageId).classList.add('active');
+            
+            // Encontrar o botão correto usando data-page
+            const activeBtn = document.querySelector(`[data-page="${pageId}"]`);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+            }
+            
+            // Scroll para o topo
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Atualizar dados quando mudar de página
+            switch(pageId) {
+                case 'transactions':
+                    updateTransactionDisplay();
+                    break;
+                case 'quotas':
+                    updateQuotasDisplay();
+                    break;
+                case 'accounts':
+                    updateAccountsDisplay();
+                    break;
+                case 'history':
+                    updateHistoryDisplay();
+                    break;
+                case 'settings':
+                    updateSettingsDisplay();
+                    break;
+            }
+        }
+
+        // Funções de movimentações
+        function updateCategories() {
+            const type = document.getElementById('transactionType').value;
+            const categorySelect = document.getElementById('transactionCategory');
+            
+            categorySelect.innerHTML = '<option value="">Selecione a categoria</option>';
+            
+            if (type && appData.categories[type]) {
+                appData.categories[type].forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category;
+                    option.textContent = category;
+                    categorySelect.appendChild(option);
+                });
+            }
+            
+            // Limpar subcategorias
+            document.getElementById('subcategoryGroup').style.display = 'none';
+            document.getElementById('customSubcategoryGroup').style.display = 'none';
+        }
+
+        function updateSubcategories() {
+            const type = document.getElementById('transactionType').value;
+            const category = document.getElementById('transactionCategory').value;
+            const subcategoryGroup = document.getElementById('subcategoryGroup');
+            const subcategorySelect = document.getElementById('transactionSubcategory');
+            const customGroup = document.getElementById('customSubcategoryGroup');
+            
+            if (type && category && appData.subcategories[type] && appData.subcategories[type][category]) {
+                subcategorySelect.innerHTML = '<option value="">Selecione a subcategoria</option>';
+                
+                appData.subcategories[type][category].forEach(subcategory => {
+                    const option = document.createElement('option');
+                    option.value = subcategory;
+                    option.textContent = subcategory;
+                    subcategorySelect.appendChild(option);
+                });
+                
+                subcategoryGroup.style.display = 'block';
+            } else {
+                subcategoryGroup.style.display = 'none';
+            }
+            
+            customGroup.style.display = 'none';
+        }
+
+        function handleSubcategoryChange() {
+            const subcategory = document.getElementById('transactionSubcategory').value;
+            const customGroup = document.getElementById('customSubcategoryGroup');
+            
+            if (subcategory === 'Outras') {
+                customGroup.style.display = 'block';
+            } else {
+                customGroup.style.display = 'none';
+                document.getElementById('customSubcategory').value = '';
+            }
+        }
+
+        function setupQuotaNameAutocomplete() {
+            const input = document.getElementById('quotaName');
+            const suggestions = document.getElementById('quotaNameSuggestions');
+            const container = input.closest('.autocomplete-container');
+            
+            // Mostrar sugestões ao clicar na seta ou focar no campo
+            input.addEventListener('focus', showQuotaSuggestions);
+            input.addEventListener('input', filterQuotaSuggestions);
+            container.querySelector('.dropdown-arrow').addEventListener('click', showQuotaSuggestions);
+            
+            // Esconder sugestões ao clicar fora
+            document.addEventListener('click', function(e) {
+                if (!container.contains(e.target)) {
+                    suggestions.style.display = 'none';
+                }
+            });
+        }
+
+        function showQuotaSuggestions() {
+            const suggestions = document.getElementById('quotaNameSuggestions');
+            const expenseCategories = appData.categories.expense;
+            
+            suggestions.innerHTML = '';
+            
+            expenseCategories.forEach(category => {
+                const div = document.createElement('div');
+                div.className = 'autocomplete-suggestion';
+                div.textContent = category;
+                div.addEventListener('click', function() {
+                    document.getElementById('quotaName').value = category;
+                    suggestions.style.display = 'none';
+                });
+                suggestions.appendChild(div);
+            });
+            
+            suggestions.style.display = 'block';
+        }
+
+        function filterQuotaSuggestions() {
+            const input = document.getElementById('quotaName');
+            const suggestions = document.getElementById('quotaNameSuggestions');
+            const value = input.value.toLowerCase();
+            const expenseCategories = appData.categories.expense;
+            
+            suggestions.innerHTML = '';
+            
+            const filtered = expenseCategories.filter(category => 
+                category.toLowerCase().startsWith(value)
+            );
+            
+            if (filtered.length > 0 && value) {
+                filtered.forEach(category => {
+                    const div = document.createElement('div');
+                    div.className = 'autocomplete-suggestion';
+                    div.textContent = category;
+                    div.addEventListener('click', function() {
+                        input.value = category;
+                        suggestions.style.display = 'none';
+                    });
+                    suggestions.appendChild(div);
+                });
+                suggestions.style.display = 'block';
+            } else {
+                suggestions.style.display = 'none';
+            }
+        }
+
+        function updateAccountOptions() {
+            const selects = document.querySelectorAll('#transactionAccount, #filterAccount');
+            
+            selects.forEach(select => {
+                const currentValue = select.value;
+                const isFilter = select.id === 'filterAccount';
+                
+                select.innerHTML = isFilter ? 
+                    '<option value="">Todas as contas</option>' : 
+                    '<option value="">Selecione a conta</option>';
+                
+                appData.accounts.forEach(account => {
+                    const option = document.createElement('option');
+                    option.value = account.id;
+                    option.textContent = `${account.name} - ${account.bank}`;
+                    select.appendChild(option);
+                });
+                
+                if (currentValue) select.value = currentValue;
+            });
+        }
+
+        function updateQuotaOptions() {
+            const select = document.getElementById('transactionQuota');
+            const currentValue = select.value;
+            
+            select.innerHTML = '<option value="">Nenhuma cota</option>';
+            
+            appData.quotas.forEach(quota => {
+                if (isQuotaActive(quota)) {
+                    const option = document.createElement('option');
+                    option.value = quota.id;
+                    option.textContent = quota.name;
+                    select.appendChild(option);
+                }
+            });
+            
+            if (currentValue) select.value = currentValue;
+        }
+
+        function toggleRecurringOptions() {
+            const isRecurring = document.getElementById('isRecurring').checked;
+            const recurringOptions = document.getElementById('recurringOptions');
+            recurringOptions.style.display = isRecurring ? 'block' : 'none';
+        }
+
+        function addTransaction(event) {
+            event.preventDefault();
+            
+            const subcategory = document.getElementById('transactionSubcategory').value;
+            const customSubcategory = document.getElementById('customSubcategory').value;
+            const finalSubcategory = subcategory === 'Outras' && customSubcategory ? customSubcategory : subcategory;
+            
+            const transaction = {
+                id: Date.now().toString(),
+                type: document.getElementById('transactionType').value,
+                category: document.getElementById('transactionCategory').value,
+                subcategory: finalSubcategory || '',
+                amount: parseFloat(document.getElementById('transactionAmount').value),
+                date: document.getElementById('transactionDate').value,
+                account: document.getElementById('transactionAccount').value,
+                quota: document.getElementById('transactionQuota').value || null,
+                description: document.getElementById('transactionDescription').value,
+                isRecurring: document.getElementById('isRecurring').checked,
+                recurringFrequency: document.getElementById('recurringFrequency').value,
+                recurringEndDate: document.getElementById('recurringEndDate').value || null,
+                created: new Date().toISOString()
+            };
+            
+            appData.transactions.push(transaction);
+            
+            // Se for recorrente, criar as próximas ocorrências
+            if (transaction.isRecurring) {
+                createRecurringTransactions(transaction);
+            }
+            
+            event.target.reset();
+            document.getElementById('transactionDate').value = new Date().toISOString().split('T')[0];
+            updateCategories();
+            updateTransactionDisplay();
+            updateQuotasDisplay();
+            updateAccountsDisplay();
+            saveData();
+            showToast('Movimentação adicionada com sucesso!');
+        }
+
+        function createRecurringTransactions(baseTransaction) {
+            const startDate = new Date(baseTransaction.date);
+            const endDate = baseTransaction.recurringEndDate ? new Date(baseTransaction.recurringEndDate) : new Date(2025, 11, 31);
+            const frequency = baseTransaction.recurringFrequency;
+            
+            let currentDate = new Date(startDate);
+            
+            while (currentDate <= endDate) {
+                // Avançar para a próxima data baseada na frequência
+                switch (frequency) {
+                    case 'daily':
+                        currentDate.setDate(currentDate.getDate() + 1);
+                        break;
+                    case 'weekly':
+                        currentDate.setDate(currentDate.getDate() + 7);
+                        break;
+                    case 'biweekly':
+                        currentDate.setDate(currentDate.getDate() + 14);
+                        break;
+                    case 'monthly':
+                        currentDate.setMonth(currentDate.getMonth() + 1);
+                        break;
+                    case 'quarterly':
+                        currentDate.setMonth(currentDate.getMonth() + 3);
+                        break;
+                    case 'semiannual':
+                        currentDate.setMonth(currentDate.getMonth() + 6);
+                        break;
+                    case 'annual':
+                        currentDate.setFullYear(currentDate.getFullYear() + 1);
+                        break;
+                }
+                
+                if (currentDate <= endDate) {
+                    const recurringTransaction = {
+                        ...baseTransaction,
+                        id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+                        date: currentDate.toISOString().split('T')[0],
+                        parentId: baseTransaction.id
+                    };
+                    appData.transactions.push(recurringTransaction);
+                }
+            }
+        }
+
+        function checkRecurringTransactions() {
+            // Esta função seria chamada quando o app é aberto para verificar
+            // se há movimentações recorrentes que devem ser executadas
+            const today = new Date().toISOString().split('T')[0];
+            
+            appData.transactions.forEach(transaction => {
+                if (transaction.isRecurring && transaction.date <= today && !transaction.executed) {
+                    transaction.executed = true;
+                }
+            });
+            
+            saveData();
+        }
+
+        function updateTransactionDisplay() {
+            displayRecentTransactions();
+            displayFutureTransactions();
+        }
+
+        function displayRecentTransactions() {
+            const container = document.getElementById('recentTransactions');
+            const recentTransactions = appData.transactions
+                .filter(t => new Date(t.date) <= new Date())
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 50);
+            
+            container.innerHTML = '';
+            
+            if (recentTransactions.length === 0) {
+                container.innerHTML = '<p>Nenhuma movimentação encontrada.</p>';
+                return;
+            }
+            
+            recentTransactions.forEach(transaction => {
+                const item = createTransactionItem(transaction);
+                container.appendChild(item);
+            });
+        }
+
+        function displayFutureTransactions() {
+            const container = document.getElementById('futureTransactions');
+            const futureTransactions = appData.transactions
+                .filter(t => new Date(t.date) > new Date())
+                .sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            container.innerHTML = '';
+            
+            if (futureTransactions.length === 0) {
+                container.innerHTML = '<p>Nenhum lançamento futuro encontrado.</p>';
+                return;
+            }
+            
+            futureTransactions.forEach(transaction => {
+                const item = createTransactionItem(transaction);
+                container.appendChild(item);
+            });
+        }
+
+        function createTransactionItem(transaction) {
+            const div = document.createElement('div');
+            div.className = 'transaction-item';
+            
+            const account = appData.accounts.find(a => a.id === transaction.account);
+            const accountName = account ? account.name : 'Conta não encontrada';
+            
+            const categoryText = transaction.subcategory ? 
+                `${transaction.category} - ${transaction.subcategory}` : 
+                transaction.category;
+            
+            div.innerHTML = `
+                <div class="transaction-info">
+                    <div class="transaction-date">${formatDate(transaction.date)} - ${accountName}</div>
+                    <div class="transaction-desc">${transaction.description}</div>
+                    <div class="transaction-category">${categoryText}</div>
+                </div>
+                <div class="transaction-amount ${transaction.type === 'income' ? 'amount-positive' : 'amount-negative'}">
+                    ${transaction.type === 'income' ? '+' : '-'} ${formatCurrency(transaction.amount)}
+                </div>
+                <div class="transaction-actions">
+                    <button class="icon-btn" onclick="editTransaction('${transaction.id}')" title="Editar">
+                        ✏️
+                    </button>
+                    <button class="icon-btn" onclick="deleteTransaction('${transaction.id}')" title="Excluir">
+                        ❌
+                    </button>
+                </div>
+            `;
+            
+            return div;
+        }
+
+        // Funções de contas
+        function addAccount(event) {
+            event.preventDefault();
+            
+            const account = {
+                id: Date.now().toString(),
+                name: document.getElementById('accountName').value,
+                bank: document.getElementById('accountBank').value,
+                type: document.getElementById('accountType').value,
+                balance: parseFloat(document.getElementById('accountBalance').value),
+                initialBalance: parseFloat(document.getElementById('accountBalance').value),
+                created: new Date().toISOString()
+            };
+            
+            appData.accounts.push(account);
+            
+            event.target.reset();
+            updateAccountOptions();
+            updateAccountsDisplay();
+            saveData();
+            showToast('Conta adicionada com sucesso!');
+        }
+
+        function updateAccountsDisplay() {
+            const container = document.getElementById('accountsGrid');
+            container.innerHTML = '';
+            
+            appData.accounts.forEach(account => {
+                const currentBalance = calculateAccountBalance(account.id);
+                const div = document.createElement('div');
+                div.className = 'account-card';
+                
+                div.innerHTML = `
+                    <div class="account-header">
+                        <div class="account-name">${account.name}</div>
+                        <div class="account-actions">
+                            <button class="icon-btn" onclick="editAccount('${account.id}')" title="Editar">
+                                ✏️
+                            </button>
+                            <button class="icon-btn" onclick="deleteAccount('${account.id}')" title="Excluir">
+                                ❌
+                            </button>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 10px; color: #6b7280;">${account.bank}</div>
+                    <div style="margin-bottom: 10px; color: #6b7280;">${getAccountTypeLabel(account.type)}</div>
+                    <div class="account-balance ${currentBalance >= 0 ? 'amount-positive' : 'amount-negative'}">
+                        ${formatCurrency(currentBalance)}
+                    </div>
+                    <div class="account-actions">
+                        <button class="btn" onclick="showAccountDetails('${account.id}')">Detalhamento</button>
+                    </div>
+                `;
+                
+                container.appendChild(div);
+            });
+        }
+
+        function calculateAccountBalance(accountId) {
+            const account = appData.accounts.find(a => a.id === accountId);
+            if (!account) return 0;
+            
+            let balance = account.initialBalance;
+            
+            appData.transactions
+                .filter(t => t.account === accountId && new Date(t.date) <= new Date())
+                .forEach(transaction => {
+                    if (transaction.type === 'income') {
+                        balance += transaction.amount;
+                    } else {
+                        balance -= transaction.amount;
+                    }
+                });
+            
+            return balance;
+        }
+
+        function getAccountTypeLabel(type) {
+            const labels = {
+                checking: 'Conta Corrente',
+                savings: 'Poupança',
+                investment: 'Investimento',
+                credit: 'Cartão de Crédito'
+            };
+            return labels[type] || type;
+        }
+
+        // Funções de cotas
+        function addQuota(event) {
+            event.preventDefault();
+            
+            const quota = {
+                id: Date.now().toString(),
+                name: document.getElementById('quotaName').value,
+                amount: parseFloat(document.getElementById('quotaAmount').value),
+                startDate: document.getElementById('quotaStartDate').value,
+                endDate: document.getElementById('quotaEndDate').value,
+                created: new Date().toISOString()
+            };
+            
+            appData.quotas.push(quota);
+            
+            event.target.reset();
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('quotaStartDate').value = today;
+            const lastDayOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).toISOString().split('T')[0];
+            document.getElementById('quotaEndDate').value = lastDayOfMonth;
+            
+            updateQuotaOptions();
+            updateQuotasDisplay();
+            saveData();
+            showToast('Cota criada com sucesso!');
+        }
+
+        function updateQuotasDisplay() {
+            const container = document.getElementById('quotasGrid');
+            container.innerHTML = '';
+            
+            appData.quotas.forEach(quota => {
+                const spent = calculateQuotaSpent(quota.id);
+                const remaining = quota.amount - spent;
+                const percentage = (spent / quota.amount) * 100;
+                
+                let cardClass = 'quota-card';
+                let progressClass = 'quota-progress-bar';
+                
+                if (remaining < 0) {
+                    cardClass += ' negative';
+                    progressClass += ' negative';
+                } else if (remaining < quota.amount * 0.2) {
+                    cardClass += ' warning';
+                    progressClass += ' warning';
+                } else {
+                    cardClass += ' positive';
+                    progressClass += ' positive';
+                }
+                
+                const div = document.createElement('div');
+                div.className = cardClass;
+                
+                div.innerHTML = `
+                    <div class="quota-header">
+                        <div class="quota-name">${quota.name}</div>
+                        <div>
+                            <button class="icon-btn" onclick="editQuota('${quota.id}')" title="Editar">
+                                ✏️
+                            </button>
+                            <button class="icon-btn" onclick="deleteQuota('${quota.id}')" title="Excluir">
+                                ❌
+                            </button>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 10px; font-size: 12px; color: #6b7280;">
+                        ${formatDate(quota.startDate)} até ${formatDate(quota.endDate)}
+                    </div>
+                    <div class="quota-progress">
+                        <div class="${progressClass}" style="width: ${Math.min(percentage, 100)}%"></div>
+                    </div>
+                    <div class="quota-amounts">
+                        <span>Gasto: ${formatCurrency(spent)}</span>
+                        <span>Restante: ${formatCurrency(remaining)}</span>
+                    </div>
+                    <div style="text-align: center; margin-top: 10px; font-weight: 600;">
+                        ${formatCurrency(quota.amount)}
+                    </div>
+                `;
+                
+                container.appendChild(div);
+            });
+        }
+
+        function calculateQuotaSpent(quotaId) {
+            return appData.transactions
+                .filter(t => t.quota === quotaId && t.type === 'expense' && new Date(t.date) <= new Date())
+                .reduce((sum, t) => sum + t.amount, 0);
+        }
+
+        function isQuotaActive(quota) {
+            const today = new Date();
+            const startDate = new Date(quota.startDate);
+            const endDate = new Date(quota.endDate);
+            return today >= startDate && today <= endDate;
+        }
+
+        // Funções de histórico
+        function updateHistoryDisplay() {
+            calculateStats();
+            displayAllTransactions();
+            updateFilterOptions();
+        }
+
+        function calculateStats() {
+            const filteredTransactions = getFilteredTransactions();
+            
+            const totalIncome = filteredTransactions
+                .filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + t.amount, 0);
+            
+            const totalExpenses = filteredTransactions
+                .filter(t => t.type === 'expense')
+                .reduce((sum, t) => sum + t.amount, 0);
+            
+            document.getElementById('totalIncome').textContent = formatCurrency(totalIncome);
+            document.getElementById('totalExpenses').textContent = formatCurrency(totalExpenses);
+            document.getElementById('netBalance').textContent = formatCurrency(totalIncome - totalExpenses);
+            document.getElementById('transactionCount').textContent = filteredTransactions.length;
+        }
+
+        function displayAllTransactions() {
+            const container = document.getElementById('allTransactions');
+            const filteredTransactions = getFilteredTransactions()
+                .sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            container.innerHTML = '';
+            
+            if (filteredTransactions.length === 0) {
+                container.innerHTML = '<p>Nenhuma movimentação encontrada com os filtros aplicados.</p>';
+                return;
+            }
+            
+            filteredTransactions.forEach(transaction => {
+                const item = createTransactionItem(transaction);
+                container.appendChild(item);
+            });
+        }
+
+        function getFilteredTransactions() {
+            let transactions = [...appData.transactions];
+            
+            const startDate = document.getElementById('filterStartDate').value;
+            const endDate = document.getElementById('filterEndDate').value;
+            const type = document.getElementById('filterType').value;
+            const account = document.getElementById('filterAccount').value;
+            
+            if (startDate) {
+                transactions = transactions.filter(t => t.date >= startDate);
+            }
+            
+            if (endDate) {
+                transactions = transactions.filter(t => t.date <= endDate);
+            }
+            
+            if (type) {
+                transactions = transactions.filter(t => t.type === type);
+            }
+            
+            if (account) {
+                transactions = transactions.filter(t => t.account === account);
+            }
+            
+            return transactions;
+        }
+
+        function updateFilterOptions() {
+            updateAccountOptions();
+        }
+
+        function applyFilters() {
+            calculateStats();
+            displayAllTransactions();
+        }
+
+        function clearFilters() {
+            document.getElementById('filterStartDate').value = '';
+            document.getElementById('filterEndDate').value = '';
+            document.getElementById('filterType').value = '';
+            document.getElementById('filterAccount').value = '';
+            
+            calculateStats();
+            displayAllTransactions();
+        }
+
+        // Funções de configurações
+        function updateSettingsDisplay() {
+            updateConfigTransactions();
+            updateConfigQuotas();
+            updateConfigAccounts();
+            updateCategoriesListDisplay();
+        }
+
+        function updateConfigTransactions() {
+            const container = document.getElementById('configTransactions');
+            container.innerHTML = '';
+            
+            if (appData.transactions.length === 0) {
+                container.innerHTML = '<p>Nenhuma movimentação cadastrada.</p>';
+                return;
+            }
+            
+            // Mostrar apenas as últimas 20 transações para evitar sobrecarga
+            const recentTransactions = appData.transactions
+                .sort((a, b) => new Date(b.created) - new Date(a.created))
+                .slice(0, 20);
+            
+            recentTransactions.forEach(transaction => {
+                const div = document.createElement('div');
+                div.className = 'config-item';
+                
+                const categoryText = transaction.subcategory ? 
+                    `${transaction.category} - ${transaction.subcategory}` : 
+                    transaction.category;
+                
+                div.innerHTML = `
+                    <div class="config-item-info">
+                        <div class="config-item-name">${transaction.description}</div>
+                        <div class="config-item-desc">${categoryText} - ${formatCurrency(transaction.amount)} - ${formatDate(transaction.date)}</div>
+                    </div>
+                    <div>
+                        <button class="icon-btn" onclick="editTransaction('${transaction.id}')" title="Editar">
+                            ✏️
+                        </button>
+                        <button class="icon-btn" onclick="deleteTransaction('${transaction.id}')" title="Excluir">
+                            ❌
+                        </button>
+                    </div>
+                `;
+                
+                container.appendChild(div);
+            });
+        }
+
+        function updateConfigQuotas() {
+            const container = document.getElementById('configQuotas');
+            container.innerHTML = '';
+            
+            if (appData.quotas.length === 0) {
+                container.innerHTML = '<p>Nenhuma cota cadastrada.</p>';
+                return;
+            }
+            
+            appData.quotas.forEach(quota => {
+                const div = document.createElement('div');
+                div.className = 'config-item';
+                
+                div.innerHTML = `
+                    <div class="config-item-info">
+                        <div class="config-item-name">${quota.name}</div>
+                        <div class="config-item-desc">${formatCurrency(quota.amount)} - ${formatDate(quota.startDate)} a ${formatDate(quota.endDate)}</div>
+                    </div>
+                    <div>
+                        <button class="icon-btn" onclick="editQuota('${quota.id}')" title="Editar">
+                            ✏️
+                        </button>
+                        <button class="icon-btn" onclick="deleteQuota('${quota.id}')" title="Excluir">
+                            ❌
+                        </button>
+                    </div>
+                `;
+                
+                container.appendChild(div);
+            });
+        }
+
+        function updateConfigAccounts() {
+            const container = document.getElementById('configAccounts');
+            container.innerHTML = '';
+            
+            if (appData.accounts.length === 0) {
+                container.innerHTML = '<p>Nenhuma conta cadastrada.</p>';
+                return;
+            }
+            
+            appData.accounts.forEach(account => {
+                const div = document.createElement('div');
+                div.className = 'config-item';
+                
+                div.innerHTML = `
+                    <div class="config-item-info">
+                        <div class="config-item-name">${account.name}</div>
+                        <div class="config-item-desc">${account.bank} - ${getAccountTypeLabel(account.type)}</div>
+                    </div>
+                    <div>
+                        <button class="icon-btn" onclick="editAccount('${account.id}')" title="Editar">
+                            ✏️
+                        </button>
+                        <button class="icon-btn" onclick="deleteAccount('${account.id}')" title="Excluir">
+                            ❌
+                        </button>
+                    </div>
+                `;
+                
+                container.appendChild(div);
+            });
+        }
+
+        function updateCategoriesListDisplay() {
+            const type = document.getElementById('categoryType').value;
+            const container = document.getElementById('categoriesList');
+            
+            container.innerHTML = '';
+            
+            if (appData.categories[type]) {
+                appData.categories[type].forEach((category, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'config-item';
+                    
+                    div.innerHTML = `
+                        <div class="config-item-info">
+                            <div class="config-item-name">${category}</div>
+                            <div class="config-item-desc">Categoria de ${type === 'income' ? 'receita' : 'despesa'}</div>
+                        </div>
+                        <div>
+                            <button class="icon-btn" onclick="deleteCategory('${type}', ${index})" title="Excluir">
+                                ❌
+                            </button>
+                        </div>
+                    `;
+                    
+                    container.appendChild(div);
+                });
+            }
+        }
+
+        function addCustomCategory() {
+            const type = document.getElementById('categoryType').value;
+            const newCategory = document.getElementById('newCategory').value.trim();
+            
+            if (!newCategory) {
+                showToast('Digite o nome da categoria', 'error');
+                return;
+            }
+            
+            if (appData.categories[type].includes(newCategory)) {
+                showToast('Esta categoria já existe', 'error');
+                return;
+            }
+            
+            // Adicionar antes de "Outras"
+            const otherIndex = appData.categories[type].findIndex(cat => 
+                cat.toLowerCase().includes('outras')
+            );
+            
+            if (otherIndex !== -1) {
+                appData.categories[type].splice(otherIndex, 0, newCategory);
+            } else {
+                appData.categories[type].push(newCategory);
+            }
+            
+            // Adicionar subcategorias padrão
+            if (!appData.subcategories[type][newCategory]) {
+                appData.subcategories[type][newCategory] = ['Outras'];
+            }
+            
+            document.getElementById('newCategory').value = '';
+            updateCategoriesListDisplay();
+            updateCategories();
+            saveData();
+            showToast('Categoria adicionada com sucesso!');
+        }
+
+        function deleteCategory(type, index) {
+            const category = appData.categories[type][index];
+            
+            if (category && category.toLowerCase().includes('outras')) {
+                showToast('Não é possível excluir a categoria "Outras"', 'error');
+                return;
+            }
+            
+            if (confirm(`Tem certeza que deseja excluir a categoria "${category}"?`)) {
+                appData.categories[type].splice(index, 1);
+                
+                // Remover subcategorias relacionadas
+                if (appData.subcategories[type][category]) {
+                    delete appData.subcategories[type][category];
+                }
+                
+                updateCategoriesListDisplay();
+                updateCategories();
+                saveData();
+                showToast('Categoria excluída com sucesso!');
+            }
+        }
+
+        function clearAllData() {
+            if (confirm('Tem certeza que deseja limpar todos os dados? Esta ação não pode ser desfeita.')) {
+                if (confirm('ATENÇÃO: Todos os dados serão perdidos permanentemente. Deseja continuar?')) {
+                    localStorage.removeItem('financasAppData');
+                    location.reload();
+                }
+            }
+        }
+
+        // Funções de edição e exclusão
+        function editTransaction(id) {
+            const transaction = appData.transactions.find(t => t.id === id);
+            if (!transaction) return;
+            
+            showEditModal('Editar Movimentação', createEditTransactionForm(transaction));
+        }
+
+        function editAccount(id) {
+            const account = appData.accounts.find(a => a.id === id);
+            if (!account) return;
+            
+            showEditModal('Editar Conta', createEditAccountForm(account));
+        }
+
+        function editQuota(id) {
+            const quota = appData.quotas.find(q => q.id === id);
+            if (!quota) return;
+            
+            showEditModal('Editar Cota', createEditQuotaForm(quota));
+        }
+
+        function deleteTransaction(id) {
+            if (confirm('Tem certeza que deseja excluir esta movimentação?')) {
+                appData.transactions = appData.transactions.filter(t => t.id !== id);
+                updateTransactionDisplay();
+                updateQuotasDisplay();
+                updateAccountsDisplay();
+                updateHistoryDisplay();
+                updateSettingsDisplay();
+                saveData();
+                showToast('Movimentação excluída com sucesso!');
+            }
+        }
+
+        function deleteAccount(id) {
+            const hasTransactions = appData.transactions.some(t => t.account === id);
+            if (hasTransactions) {
+                alert('Não é possível excluir uma conta que possui movimentações.');
+                return;
+            }
+            
+            if (confirm('Tem certeza que deseja excluir esta conta?')) {
+                appData.accounts = appData.accounts.filter(a => a.id !== id);
+                updateAccountOptions();
+                updateAccountsDisplay();
+                updateSettingsDisplay();
+                saveData();
+                showToast('Conta excluída com sucesso!');
+            }
+        }
+
+        function deleteQuota(id) {
+            if (confirm('Tem certeza que deseja excluir esta cota?')) {
+                // Remover a cota das transações
+                appData.transactions.forEach(t => {
+                    if (t.quota === id) {
+                        t.quota = null;
+                    }
+                });
+                
+                appData.quotas = appData.quotas.filter(q => q.id !== id);
+                updateQuotaOptions();
+                updateQuotasDisplay();
+                updateSettingsDisplay();
+                saveData();
+                showToast('Cota excluída com sucesso!');
+            }
+        }
+
+        // Funções do modal
+        function showEditModal(title, content) {
+            document.querySelector('.modal-title').textContent = title;
+            document.getElementById('editModalBody').innerHTML = content;
+            document.getElementById('editModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        function createEditTransactionForm(transaction) {
+            return `
+                <form id="editTransactionForm">
+                    <input type="hidden" id="editTransactionId" value="${transaction.id}">
+                    <div class="form-group">
+                        <label>Tipo</label>
+                        <select id="editTransactionType" required>
+                            <option value="income" ${transaction.type === 'income' ? 'selected' : ''}>Receita</option>
+                            <option value="expense" ${transaction.type === 'expense' ? 'selected' : ''}>Despesa</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Valor (R$)</label>
+                        <input type="number" id="editTransactionAmount" step="0.01" value="${transaction.amount}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Data</label>
+                        <input type="date" id="editTransactionDate" value="${transaction.date}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Descrição</label>
+                        <input type="text" id="editTransactionDescription" value="${transaction.description}" required>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; flex-wrap: wrap;">
+                        <button type="button" class="btn" onclick="closeModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Salvar</button>
+                    </div>
+                </form>
+            `;
+        }
+
+        function createEditAccountForm(account) {
+            return `
+                <form id="editAccountForm">
+                    <input type="hidden" id="editAccountId" value="${account.id}">
+                    <div class="form-group">
+                        <label>Nome da Conta</label>
+                        <input type="text" id="editAccountName" value="${account.name}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Banco</label>
+                        <input type="text" id="editAccountBank" value="${account.bank}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de Conta</label>
+                        <select id="editAccountType" required>
+                            <option value="checking" ${account.type === 'checking' ? 'selected' : ''}>Conta Corrente</option>
+                            <option value="savings" ${account.type === 'savings' ? 'selected' : ''}>Poupança</option>
+                            <option value="investment" ${account.type === 'investment' ? 'selected' : ''}>Investimento</option>
+                            <option value="credit" ${account.type === 'credit' ? 'selected' : ''}>Cartão de Crédito</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Saldo Inicial (R$)</label>
+                        <input type="number" id="editAccountBalance" step="0.01" value="${account.initialBalance}" required>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; flex-wrap: wrap;">
+                        <button type="button" class="btn" onclick="closeModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Salvar</button>
+                    </div>
+                </form>
+            `;
+        }
+
+        function createEditQuotaForm(quota) {
+            return `
+                <form id="editQuotaForm">
+                    <input type="hidden" id="editQuotaId" value="${quota.id}">
+                    <div class="form-group">
+                        <label>Nome da Cota</label>
+                        <input type="text" id="editQuotaName" value="${quota.name}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Valor da Cota (R$)</label>
+                        <input type="number" id="editQuotaAmount" step="0.01" value="${quota.amount}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Data de Início</label>
+                        <input type="date" id="editQuotaStartDate" value="${quota.startDate}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Data de Término</label>
+                        <input type="date" id="editQuotaEndDate" value="${quota.endDate}" required>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; flex-wrap: wrap;">
+                        <button type="button" class="btn" onclick="closeModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Salvar</button>
+                    </div>
+                </form>
+            `;
+        }
+
+        // Event delegation para formulários de edição
+        document.addEventListener('submit', function(event) {
+            if (event.target.id === 'editTransactionForm') {
+                event.preventDefault();
+                const id = document.getElementById('editTransactionId').value;
+                const transaction = appData.transactions.find(t => t.id === id);
+                
+                transaction.type = document.getElementById('editTransactionType').value;
+                transaction.amount = parseFloat(document.getElementById('editTransactionAmount').value);
+                transaction.date = document.getElementById('editTransactionDate').value;
+                transaction.description = document.getElementById('editTransactionDescription').value;
+                
+                closeModal();
+                updateTransactionDisplay();
+                updateQuotasDisplay();
+                updateAccountsDisplay();
+                updateHistoryDisplay();
+                updateSettingsDisplay();
+                saveData();
+                showToast('Movimentação atualizada com sucesso!');
+            }
+            
+            if (event.target.id === 'editAccountForm') {
+                event.preventDefault();
+                const id = document.getElementById('editAccountId').value;
+                const account = appData.accounts.find(a => a.id === id);
+                
+                account.name = document.getElementById('editAccountName').value;
+                account.bank = document.getElementById('editAccountBank').value;
+                account.type = document.getElementById('editAccountType').value;
+                account.initialBalance = parseFloat(document.getElementById('editAccountBalance').value);
+                
+                closeModal();
+                updateAccountOptions();
+                updateAccountsDisplay();
+                updateSettingsDisplay();
+                saveData();
+                showToast('Conta atualizada com sucesso!');
+            }
+            
+            if (event.target.id === 'editQuotaForm') {
+                event.preventDefault();
+                const id = document.getElementById('editQuotaId').value;
+                const quota = appData.quotas.find(q => q.id === id);
+                
+                quota.name = document.getElementById('editQuotaName').value;
+                quota.amount = parseFloat(document.getElementById('editQuotaAmount').value);
+                quota.startDate = document.getElementById('editQuotaStartDate').value;
+                quota.endDate = document.getElementById('editQuotaEndDate').value;
+                
+                closeModal();
+                updateQuotaOptions();
+                updateQuotasDisplay();
+                updateSettingsDisplay();
+                saveData();
+                showToast('Cota atualizada com sucesso!');
+            }
+        });
+
+        // Funções de dados
+        function saveData() {
+            localStorage.setItem('financasAppData', JSON.stringify(appData));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('financasAppData');
+            if (saved) {
+                try {
+                    const loadedData = JSON.parse(saved);
+                    // Manter estrutura de categorias e subcategorias se não existir
+                    if (!loadedData.subcategories) {
+                        loadedData.subcategories = appData.subcategories;
+                    }
+                    appData = loadedData;
+                } catch (error) {
+                    console.error('Erro ao carregar dados:', error);
+                    showToast('Erro ao carregar dados salvos', 'error');
+                }
+            }
+        }
+
+        function exportData() {
+            const dataStr = JSON.stringify(appData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `financas-backup-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            showToast('Dados exportados com sucesso!');
+        }
+
+        function importData() {
+            document.getElementById('fileInput').click();
+        }
+
+        function handleFileImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    
+                    if (confirm('Isso substituirá todos os dados atuais. Deseja continuar?')) {
+                        appData = importedData;
+                        updateCategories();
+                        updateAccountOptions();
+                        updateQuotaOptions();
+                        updateFilterOptions();
+                        updateTransactionDisplay();
+                        updateQuotasDisplay();
+                        updateAccountsDisplay();
+                        updateHistoryDisplay();
+                        updateSettingsDisplay();
+                        saveData();
+                        showToast('Dados importados com sucesso!');
+                    }
+                } catch (error) {
+                    showToast('Erro ao importar arquivo. Verifique se é um arquivo válido.', 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Funções auxiliares
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(amount);
+        }
+
+        function formatDate(dateString) {
+            return new Date(dateString + 'T00:00:00').toLocaleDateString('pt-BR');
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Fechar modal quando clicar fora
+        window.onclick = function(event) {
+            const modal = document.getElementById('editModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Registrar Service Worker para PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('sw.js')
+                    .then(function(registration) {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(function(err) {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+
+        // Função para mostrar detalhes da conta (placeholder)
+        function showAccountDetails(accountId) {
+            showToast('Funcionalidade de detalhamento em desenvolvimento!');
+        }
+    </script>
+</body>
+</html>
