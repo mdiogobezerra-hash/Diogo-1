@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, shrink-to-fit=no">
     <title>Finanças - Controle Financeiro Pessoal</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#2563eb">
@@ -10,6 +10,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Finanças">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
     <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💰</text></svg>">
     <style>
         * {
@@ -34,31 +36,62 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            /* Mobile optimizations */
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+            touch-action: manipulation;
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 10px;
+            padding: clamp(8px, 2vw, 15px);
             min-height: 100vh;
             min-height: -webkit-fill-available;
+        }
+
+        /* Mobile-first responsive adjustments */
+        @media (max-width: 480px) {
+            .container {
+                padding: 8px;
+            }
         }
 
         .header {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 15px;
+            border-radius: clamp(10px, 3vw, 15px);
+            padding: clamp(12px, 3vw, 18px);
+            margin-bottom: clamp(10px, 2.5vw, 15px);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             position: sticky;
-            top: 10px;
+            top: clamp(5px, 1.5vw, 10px);
             z-index: 100;
+            gap: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+                padding: 15px 12px;
+            }
+            
+            .logo {
+                justify-content: center;
+            }
+            
+            .nav-buttons {
+                justify-content: center;
+                gap: 8px;
+            }
         }
 
         .logo {
@@ -84,10 +117,10 @@
             background: #2563eb;
             color: white;
             border: none;
-            padding: 10px 12px;
+            padding: clamp(10px, 2.5vw, 12px) clamp(12px, 3vw, 16px);
             border-radius: 8px;
             cursor: pointer;
-            font-size: clamp(11px, 2.5vw, 14px);
+            font-size: clamp(12px, 3vw, 14px);
             font-weight: 500;
             transition: all 0.3s ease;
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
@@ -95,10 +128,29 @@
             -webkit-touch-callout: none;
             -webkit-user-select: none;
             user-select: none;
-            min-height: 44px;
+            min-height: 48px;
             display: flex;
             align-items: center;
             justify-content: center;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 480px) {
+            .nav-btn {
+                font-size: 13px;
+                padding: 12px 14px;
+                min-height: 48px;
+                flex: 1;
+                min-width: 0;
+            }
+            
+            .nav-buttons {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+                width: 100%;
+            }
         }
 
         .nav-btn:hover,
@@ -117,11 +169,18 @@
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
+            border-radius: clamp(10px, 3vw, 15px);
+            padding: clamp(15px, 4vw, 25px);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             min-height: calc(100vh - 140px);
-            margin-bottom: 20px;
+            margin-bottom: clamp(15px, 3vw, 20px);
+        }
+
+        @media (max-width: 768px) {
+            .page {
+                padding: 15px 12px;
+                min-height: calc(100vh - 160px);
+            }
         }
 
         .page.active {
@@ -165,10 +224,10 @@
             background: linear-gradient(45deg, #10b981, #059669);
             color: white;
             border: none;
-            padding: 12px 20px;
+            padding: clamp(12px, 3vw, 15px) clamp(20px, 5vw, 25px);
             border-radius: 10px;
             cursor: pointer;
-            font-size: clamp(14px, 3vw, 16px);
+            font-size: clamp(16px, 4vw, 18px);
             font-weight: 600;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
@@ -176,7 +235,24 @@
             align-items: center;
             gap: 8px;
             touch-action: manipulation;
-            min-height: 44px;
+            min-height: 52px;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 480px) {
+            .action-btn {
+                font-size: 16px;
+                min-height: 54px;
+                padding: 15px 22px;
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 12px;
+                align-items: stretch;
+            }
         }
 
         .action-btn:hover,
@@ -186,31 +262,57 @@
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: clamp(18px, 4vw, 25px);
             position: relative;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: clamp(8px, 2vw, 12px);
             color: #374151;
             font-weight: 500;
-            font-size: clamp(14px, 3vw, 16px);
+            font-size: clamp(15px, 3.5vw, 17px);
+        }
+
+        @media (max-width: 480px) {
+            .form-group {
+                margin-bottom: 20px;
+            }
+            
+            .form-group label {
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
         }
 
         .form-group input,
         .form-group select,
         .form-group textarea {
             width: 100%;
-            padding: 12px;
+            padding: clamp(12px, 3vw, 15px);
             border: 2px solid #e5e7eb;
             border-radius: 8px;
-            font-size: clamp(14px, 3.5vw, 16px);
+            font-size: clamp(16px, 4vw, 18px);
             transition: border-color 0.3s ease;
             background: white;
             -webkit-appearance: none;
             appearance: none;
-            min-height: 44px;
+            min-height: 50px;
+            /* Mobile input optimizations */
+            -webkit-border-radius: 8px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            outline: none;
+        }
+
+        @media (max-width: 480px) {
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                font-size: 16px; /* Prevents zoom on iOS */
+                min-height: 52px;
+                padding: 14px;
+            }
         }
 
         .form-group input:focus,
@@ -224,24 +326,47 @@
         .form-row {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px;
+            gap: clamp(12px, 3vw, 18px);
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
         }
 
         .btn {
             background: #2563eb;
             color: white;
             border: none;
-            padding: 12px 24px;
+            padding: clamp(12px, 3vw, 15px) clamp(20px, 5vw, 28px);
             border-radius: 8px;
             cursor: pointer;
-            font-size: clamp(14px, 3vw, 16px);
+            font-size: clamp(16px, 4vw, 18px);
             font-weight: 500;
             transition: all 0.3s ease;
             touch-action: manipulation;
-            min-height: 44px;
+            min-height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 8px;
+        }
+
+        @media (max-width: 480px) {
+            .btn {
+                font-size: 16px;
+                min-height: 52px;
+                padding: 15px 24px;
+            }
         }
 
         .btn:hover,
@@ -270,33 +395,91 @@
 
         .card {
             background: white;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
+            border-radius: clamp(10px, 3vw, 15px);
+            padding: clamp(15px, 4vw, 20px);
+            margin-bottom: clamp(12px, 3vw, 18px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             border: 1px solid #e5e7eb;
         }
 
         .card h3 {
             color: #2563eb;
-            margin-bottom: 15px;
-            font-size: clamp(1.1rem, 4vw, 1.3rem);
+            margin-bottom: clamp(12px, 3vw, 18px);
+            font-size: clamp(1.1rem, 4vw, 1.4rem);
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 15px 12px;
+                margin-bottom: 12px;
+            }
+            
+            .card h3 {
+                font-size: 1.2rem;
+                margin-bottom: 15px;
+            }
         }
 
         .transaction-list {
-            max-height: 350px;
+            max-height: clamp(300px, 40vh, 400px);
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e0 transparent;
+        }
+
+        .transaction-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .transaction-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .transaction-list::-webkit-scrollbar-thumb {
+            background-color: #cbd5e0;
+            border-radius: 3px;
+        }
+
+        @media (max-width: 480px) {
+            .transaction-list {
+                max-height: 250px;
+            }
         }
 
         .transaction-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px;
+            padding: clamp(12px, 3vw, 15px);
             border-bottom: 1px solid #e5e7eb;
             transition: background-color 0.3s ease;
-            min-height: 60px;
+            min-height: clamp(60px, 8vw, 70px);
+            gap: 8px;
+        }
+
+        @media (max-width: 480px) {
+            .transaction-item {
+                padding: 12px 8px;
+                min-height: 65px;
+                flex-wrap: wrap;
+                align-items: flex-start;
+            }
+            
+            .transaction-info {
+                flex: 1 1 60%;
+                min-width: 0;
+            }
+            
+            .transaction-amount {
+                flex: 0 0 auto;
+                margin-bottom: 4px;
+            }
+            
+            .transaction-actions {
+                flex: 0 0 auto;
+                margin-top: 4px;
+            }
         }
 
         .transaction-item:hover,
@@ -360,15 +543,23 @@
             background: none;
             border: none;
             cursor: pointer;
-            padding: 8px;
+            padding: clamp(8px, 2vw, 10px);
             border-radius: 6px;
             transition: background-color 0.3s ease;
             touch-action: manipulation;
-            min-width: 36px;
-            min-height: 36px;
+            min-width: clamp(40px, 10vw, 44px);
+            min-height: clamp(40px, 10vw, 44px);
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        @media (max-width: 480px) {
+            .icon-btn {
+                min-width: 44px;
+                min-height: 44px;
+                padding: 10px;
+            }
         }
 
         .icon-btn:hover,
@@ -379,16 +570,39 @@
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
+            gap: clamp(12px, 3vw, 18px);
+            margin-top: clamp(15px, 4vw, 25px);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                margin-top: 15px;
+            }
         }
 
         .quota-card {
             background: white;
-            border-radius: 12px;
-            padding: 15px;
+            border-radius: clamp(10px, 3vw, 15px);
+            padding: clamp(15px, 4vw, 20px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             border-left: 4px solid #2563eb;
+            margin-bottom: clamp(12px, 3vw, 15px);
+        }
+
+        @media (max-width: 480px) {
+            .quota-card {
+                padding: 15px;
+                margin-bottom: 12px;
+            }
         }
 
         .quota-card.positive {
@@ -407,14 +621,31 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-            min-height: 36px;
+            margin-bottom: clamp(12px, 3vw, 18px);
+            min-height: clamp(40px, 8vw, 44px);
+            gap: 10px;
         }
 
         .quota-name {
             font-weight: 600;
             color: #374151;
-            font-size: clamp(14px, 3.5vw, 16px);
+            font-size: clamp(15px, 3.5vw, 17px);
+            flex: 1;
+            min-width: 0;
+        }
+
+        @media (max-width: 480px) {
+            .quota-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+                margin-bottom: 15px;
+            }
+            
+            .quota-name {
+                font-size: 16px;
+                text-align: center;
+            }
         }
 
         .quota-progress {
@@ -447,423 +678,234 @@
         .quota-amounts {
             display: flex;
             justify-content: space-between;
-            font-size: clamp(12px, 3vw, 14px);
-        }
-
-        .account-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 15px;
-        }
-
-        .account-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            border: 1px solid #e5e7eb;
-        }
-
-        .account-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            min-height: 36px;
-        }
-
-        .account-name {
-            font-size: clamp(1.1rem, 4vw, 1.2rem);
-            font-weight: 600;
-            color: #2563eb;
-        }
-
-        .account-balance {
-            font-size: clamp(1.3rem, 5vw, 1.5rem);
-            font-weight: 700;
-        }
-
-        .account-actions {
-            margin-top: 15px;
-            display: flex;
+            font-size: clamp(13px, 3vw, 15px);
             gap: 10px;
             flex-wrap: wrap;
         }
 
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        @media (max-width: 480px) {
+            .quota-amounts {
+                font-size: 14px;
+                justify-content: center;
+                text-align: center;
+            }
         }
 
-        .modal-content {
-            background-color: white;
-            margin: 5% auto;
-            padding: 20px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            max-height: 80vh;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
+        .quota-used {
+            color: #6b7280;
         }
 
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-title {
-            color: #2563eb;
-            font-size: clamp(1.2rem, 4vw, 1.5rem);
+        .quota-total {
+            color: #374151;
             font-weight: 600;
         }
 
-        .close {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #6b7280;
-            min-width: 36px;
-            min-height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            touch-action: manipulation;
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #10b981;
+        .account-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 15px 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            transform: translateX(400px);
-            transition: transform 0.3s ease;
-            z-index: 1001;
-            max-width: calc(100vw - 40px);
-            font-size: clamp(14px, 3vw, 16px);
-        }
-
-        .toast.show {
-            transform: translateX(0);
-        }
-
-        .toast.error {
-            background: #dc2626;
-        }
-
-        .chart-container {
-            margin: 20px 0;
-            height: 250px;
-            position: relative;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 15px;
             border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         }
 
-        .stat-value {
-            font-size: clamp(1.5rem, 5vw, 2rem);
+        .account-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+
+        .account-balance {
+            font-size: 1.8rem;
             font-weight: 700;
-            margin-bottom: 5px;
+            margin-bottom: 15px;
         }
 
-        .stat-label {
-            color: #6b7280;
-            font-size: clamp(12px, 3vw, 14px);
+        .balance-positive {
+            color: #10b981;
+        }
+
+        .balance-negative {
+            color: #ef4444;
         }
 
         .autocomplete-container {
             position: relative;
         }
 
-        .autocomplete-suggestions {
+        .autocomplete-list {
             position: absolute;
             top: 100%;
             left: 0;
             right: 0;
             background: white;
-            border: 1px solid #e5e7eb;
+            border: 2px solid #2563eb;
             border-top: none;
             border-radius: 0 0 8px 8px;
             max-height: 200px;
             overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            z-index: 100;
-            display: none;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
-        .autocomplete-suggestion {
+        .autocomplete-item {
             padding: 12px;
             cursor: pointer;
-            border-bottom: 1px solid #f3f4f6;
-            font-size: clamp(14px, 3vw, 16px);
-            touch-action: manipulation;
+            border-bottom: 1px solid #e5e7eb;
+            transition: background-color 0.3s ease;
         }
 
-        .autocomplete-suggestion:hover,
-        .autocomplete-suggestion:active {
-            background-color: #f9fafb;
+        .autocomplete-item:hover,
+        .autocomplete-item:active {
+            background-color: #f3f4f6;
         }
 
-        .autocomplete-suggestion:last-child {
+        .autocomplete-item:last-child {
             border-bottom: none;
         }
 
-        .dropdown-arrow {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-            color: #6b7280;
+        /* Responsive Tables */
+        .responsive-table {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
-        .config-section {
-            margin-bottom: 25px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: clamp(12px, 2.5vw, 14px);
         }
 
-        .config-section h3 {
-            color: #2563eb;
-            margin-bottom: 15px;
-            font-size: clamp(1.1rem, 4vw, 1.3rem);
+        th, td {
+            padding: 12px 8px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
         }
 
-        .config-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
+        th {
+            font-weight: 600;
+            color: #374151;
+            background-color: #f9fafb;
         }
 
-        .config-item {
-            background: #f9fafb;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #e5e7eb;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            min-height: 60px;
+        /* Status indicators */
+        .status-positive {
+            color: #10b981;
+            font-weight: 600;
         }
 
-        .config-item-info {
-            flex: 1;
-            min-width: 0;
+        .status-negative {
+            color: #dc2626;
+            font-weight: 600;
         }
 
-        .config-item-name {
-            font-weight: 500;
-            margin-bottom: 4px;
-            font-size: clamp(14px, 3.5vw, 16px);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        .status-warning {
+            color: #f59e0b;
+            font-weight: 600;
         }
 
-        .config-item-desc {
-            font-size: clamp(12px, 2.5vw, 13px);
-            color: #6b7280;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #2563eb;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
 
-        /* Mobile specific styles */
-        @media (max-width: 768px) {
-            .container {
-                padding: 8px;
-            }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
-            .header {
-                flex-direction: column;
-                gap: 12px;
-                padding: 12px;
-                position: relative;
-                top: 0;
-            }
+        /* Utility classes for mobile */
+        .text-center-mobile {
+            text-align: center;
+        }
 
-            .nav-buttons {
-                width: 100%;
-                justify-content: space-around;
-                flex-wrap: wrap;
-                gap: 4px;
-            }
-
-            .nav-btn {
-                flex: 1;
-                min-width: 0;
-                padding: 8px 4px;
-                font-size: 11px;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .action-buttons {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 10px;
-            }
-
-            .action-btn {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .modal-content {
-                margin: 2% auto;
-                width: 95%;
-                padding: 15px;
-                max-height: 90vh;
-            }
-
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .account-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .transaction-item {
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 10px;
-            }
-
-            .transaction-amount {
-                margin: 5px 0;
-                align-self: flex-end;
-            }
-
-            .transaction-actions {
-                align-self: flex-end;
-                margin-top: 5px;
-            }
-
-            .quota-amounts {
-                flex-direction: column;
-                gap: 4px;
-            }
-
-            .config-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-
-            .config-item > div:last-child {
-                align-self: flex-end;
+        @media (min-width: 768px) {
+            .text-center-mobile {
+                text-align: left;
             }
         }
 
-        /* iPhone X and newer safe areas */
-        @supports (padding: max(0px)) {
-            .container {
-                padding-left: max(10px, env(safe-area-inset-left));
-                padding-right: max(10px, env(safe-area-inset-right));
-                padding-bottom: max(20px, env(safe-area-inset-bottom));
-            }
+        .hidden-mobile {
+            display: block;
         }
 
-        /* Dark mode support */
-        @media (prefers-color-scheme: dark) {
-            body {
-                background: linear-gradient(135deg, #1e3a8a 0%, #581c87 100%);
-            }
-        }
-
-        /* High contrast mode */
-        @media (prefers-contrast: high) {
-            .btn,
-            .nav-btn {
-                border: 2px solid currentColor;
-            }
-        }
-
-        /* Reduced motion */
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-
-        /* Print styles */
-        @media print {
-            .nav-buttons,
-            .action-buttons {
+        @media (max-width: 480px) {
+            .hidden-mobile {
                 display: none;
+            }
+        }
+
+        .show-mobile {
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            .show-mobile {
+                display: block;
+            }
+        }
+
+        /* Enhanced touch feedback */
+        .touch-feedback:active {
+            transform: scale(0.95);
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        /* Better focus styles for accessibility */
+        .nav-btn:focus,
+        .btn:focus,
+        .action-btn:focus,
+        .icon-btn:focus {
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
+        }
+
+        /* Safe area adjustments for notched devices */
+        @supports(padding: max(0px)) {
+            .header {
+                padding-left: max(clamp(12px, 3vw, 18px), env(safe-area-inset-left));
+                padding-right: max(clamp(12px, 3vw, 18px), env(safe-area-inset-right));
             }
             
             .page {
-                display: block !important;
-                break-inside: avoid;
+                padding-left: max(clamp(15px, 4vw, 25px), env(safe-area-inset-left));
+                padding-right: max(clamp(15px, 4vw, 25px), env(safe-area-inset-right));
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header class="header">
+        <div class="header">
             <div class="logo">
                 <span style="font-size: 2rem;">💰</span>
                 <h1>Finanças</h1>
             </div>
-            <nav class="nav-buttons">
-                <button class="nav-btn active" onclick="showPage('home')" data-page="home">🏠 Início</button>
-                <button class="nav-btn" onclick="showPage('transactions')" data-page="transactions">💸 Movimentações</button>
-                <button class="nav-btn" onclick="showPage('quotas')" data-page="quotas">📊 Cotas</button>
-                <button class="nav-btn" onclick="showPage('accounts')" data-page="accounts">🏦 Contas</button>
-                <button class="nav-btn" onclick="showPage('history')" data-page="history">📈 Histórico</button>
-                <button class="nav-btn" onclick="showPage('settings')" data-page="settings">⚙️ Config</button>
-            </nav>
-        </header>
+            <div class="nav-buttons">
+                <button class="nav-btn active" onclick="showPage('capa')">Capa</button>
+                <button class="nav-btn" onclick="showPage('movimentacoes')">Movimentações</button>
+                <button class="nav-btn" onclick="showPage('cotas')">Cotas</button>
+                <button class="nav-btn" onclick="showPage('contas')">Contas</button>
+                <button class="nav-btn" onclick="showPage('historico')">Histórico</button>
+                <button class="nav-btn" onclick="showPage('configuracoes')">Configurações</button>
+            </div>
+        </div>
 
-        <!-- Página Inicial -->
-        <main id="home" class="page active">
+        <!-- Página Capa -->
+        <div id="capa" class="page active">
             <div class="welcome-section">
                 <div class="welcome-icon">💰</div>
-                <h2 class="page-title">Bem-vindo ao Finanças</h2>
+                <h2 class="page-title">Finanças</h2>
                 <p class="welcome-text">
-                    Seu assistente pessoal para controle financeiro completo.<br>
-                    Gerencie suas receitas, despesas, contas bancárias e cotas de gastos<br>
-                    de forma simples e intuitiva.
+                    Seu controle financeiro pessoal completo e intuitivo.<br>
+                    Gerencie suas receitas, despesas, contas e cotas de forma simples e eficiente.
                 </p>
-                
                 <div class="action-buttons">
                     <button class="action-btn" onclick="saveData()">
                         💾 Salvar Dados
@@ -871,155 +913,148 @@
                     <button class="action-btn" onclick="exportData()">
                         📤 Exportar Dados
                     </button>
-                    <button class="action-btn" onclick="importData()">
-                        📥 Importar Dados
-                    </button>
                 </div>
             </div>
-        </main>
+        </div>
 
-        <!-- Página de Movimentações -->
-        <main id="transactions" class="page">
+        <!-- Página Movimentações -->
+        <div id="movimentacoes" class="page">
             <h2 class="page-title">Movimentações Financeiras</h2>
             
             <div class="card">
-                <h3>Nova Movimentação</h3>
+                <h3>Cadastrar Nova Movimentação</h3>
                 <form id="transactionForm">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="transactionType">Tipo</label>
-                            <select id="transactionType" required>
+                            <label for="transactionType">Tipo:</label>
+                            <select id="transactionType" onchange="updateCategories()">
                                 <option value="">Selecione o tipo</option>
-                                <option value="income">Receita</option>
-                                <option value="expense">Despesa</option>
+                                <option value="receita">Receita</option>
+                                <option value="despesa">Despesa</option>
                             </select>
                         </div>
+                        
                         <div class="form-group">
-                            <label for="transactionCategory">Categoria</label>
-                            <select id="transactionCategory" required>
-                                <option value="">Selecione a categoria</option>
-                            </select>
+                            <label for="amount">Valor (R$):</label>
+                            <input type="number" id="amount" step="0.01" placeholder="0,00">
                         </div>
                     </div>
                     
                     <div class="form-row">
+                        <div class="form-group">
+                            <label for="date">Data:</label>
+                            <input type="date" id="date">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="description">Descrição:</label>
+                            <input type="text" id="description" placeholder="Digite uma descrição">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="category">Categoria:</label>
+                            <select id="category" onchange="updateSubcategories()">
+                                <option value="">Selecione uma categoria</option>
+                            </select>
+                        </div>
+                        
                         <div class="form-group" id="subcategoryGroup" style="display: none;">
-                            <label for="transactionSubcategory">Subcategoria</label>
-                            <select id="transactionSubcategory">
-                                <option value="">Selecione a subcategoria</option>
+                            <label for="subcategory">Subcategoria:</label>
+                            <select id="subcategory" onchange="toggleOtherSubcategory()">
+                                <option value="">Selecione uma subcategoria</option>
                             </select>
                         </div>
-                        <div class="form-group" id="customSubcategoryGroup" style="display: none;">
-                            <label for="customSubcategory">Subcategoria Personalizada</label>
-                            <input type="text" id="customSubcategory" placeholder="Digite a subcategoria">
-                        </div>
+                    </div>
+                    
+                    <div class="form-group" id="otherSubcategoryGroup" style="display: none;">
+                        <label for="otherSubcategory">Especificar Subcategoria:</label>
+                        <input type="text" id="otherSubcategory" placeholder="Digite a subcategoria específica">
                     </div>
                     
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="transactionAmount">Valor (R$)</label>
-                            <input type="number" id="transactionAmount" step="0.01" min="0" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="transactionDate">Data</label>
-                            <input type="date" id="transactionDate" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="transactionAccount">Conta</label>
-                            <select id="transactionAccount" required>
-                                <option value="">Selecione a conta</option>
+                            <label for="account">Conta Bancária:</label>
+                            <select id="account">
+                                <option value="">Selecione uma conta</option>
                             </select>
                         </div>
+                        
                         <div class="form-group">
-                            <label for="transactionQuota">Cota (opcional)</label>
-                            <select id="transactionQuota">
-                                <option value="">Nenhuma cota</option>
+                            <label for="quota">Cota (opcional):</label>
+                            <select id="quota">
+                                <option value="">Selecione uma cota</option>
                             </select>
                         </div>
                     </div>
                     
                     <div class="form-group">
-                        <label for="transactionDescription">Descrição</label>
-                        <input type="text" id="transactionDescription" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="isRecurring">
-                            <input type="checkbox" id="isRecurring"> Movimentação recorrente
-                        </label>
-                    </div>
-                    
-                    <div id="recurringOptions" style="display: none;">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="recurringFrequency">Frequência</label>
-                                <select id="recurringFrequency">
-                                    <option value="daily">Diário</option>
-                                    <option value="weekly">Semanal</option>
-                                    <option value="biweekly">Quinzenal</option>
-                                    <option value="monthly">Mensal</option>
-                                    <option value="quarterly">Trimestral</option>
-                                    <option value="semiannual">Semestral</option>
-                                    <option value="annual">Anual</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="recurringEndDate">Data de término (opcional)</label>
-                                <input type="date" id="recurringEndDate">
-                            </div>
-                        </div>
+                        <label for="recurrence">Recorrência:</label>
+                        <select id="recurrence">
+                            <option value="unica">Única</option>
+                            <option value="diaria">Diária</option>
+                            <option value="semanal">Semanal</option>
+                            <option value="quinzenal">Quinzenal</option>
+                            <option value="mensal">Mensal</option>
+                            <option value="trimestral">Trimestral</option>
+                            <option value="semestral">Semestral</option>
+                            <option value="anual">Anual</option>
+                        </select>
                     </div>
                     
                     <button type="submit" class="btn btn-success">Adicionar Movimentação</button>
                 </form>
             </div>
             
-            <div style="display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 20px;">
+            <div class="form-row">
                 <div class="card">
-                    <h3>Últimas Movimentações</h3>
-                    <div id="recentTransactions" class="transaction-list"></div>
+                    <h3>Histórico Recente</h3>
+                    <div class="transaction-list" id="recentTransactions">
+                        <!-- Transactions will be loaded here -->
+                    </div>
                 </div>
                 
                 <div class="card">
                     <h3>Lançamentos Futuros</h3>
-                    <div id="futureTransactions" class="transaction-list"></div>
+                    <div class="transaction-list" id="futureTransactions">
+                        <!-- Future transactions will be loaded here -->
+                    </div>
                 </div>
             </div>
-        </main>
+        </div>
 
-        <!-- Página de Cotas -->
-        <main id="quotas" class="page">
-            <h2 class="page-title">Dashboard de Cotas Mensais</h2>
+        <!-- Página Cotas -->
+        <div id="cotas" class="page">
+            <h2 class="page-title">Cotas Mensais</h2>
             
             <div class="card">
-                <h3>Nova Cota</h3>
+                <h3>Cadastrar Nova Cota</h3>
                 <form id="quotaForm">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="quotaName">Nome da Cota</label>
                             <div class="autocomplete-container">
-                                <input type="text" id="quotaName" required autocomplete="off">
-                                <span class="dropdown-arrow">▼</span>
-                                <div id="quotaNameSuggestions" class="autocomplete-suggestions"></div>
+                                <label for="quotaName">Nome da Cota:</label>
+                                <input type="text" id="quotaName" placeholder="Digite o nome da cota" onkeyup="showQuotaSuggestions()">
+                                <div id="quotaSuggestions" class="autocomplete-list" style="display: none;"></div>
                             </div>
                         </div>
+                        
                         <div class="form-group">
-                            <label for="quotaAmount">Valor da Cota (R$)</label>
-                            <input type="number" id="quotaAmount" step="0.01" min="0" required>
+                            <label for="quotaAmount">Valor da Cota (R$):</label>
+                            <input type="number" id="quotaAmount" step="0.01" placeholder="0,00">
                         </div>
                     </div>
                     
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="quotaStartDate">Data de Início</label>
-                            <input type="date" id="quotaStartDate" required>
+                            <label for="quotaStartDate">Data de Início:</label>
+                            <input type="date" id="quotaStartDate">
                         </div>
+                        
                         <div class="form-group">
-                            <label for="quotaEndDate">Data de Término</label>
-                            <input type="date" id="quotaEndDate" required>
+                            <label for="quotaEndDate">Data de Fim:</label>
+                            <input type="date" id="quotaEndDate">
                         </div>
                     </div>
                     
@@ -1027,456 +1062,294 @@
                 </form>
             </div>
             
-            <div id="quotasGrid" class="dashboard-grid"></div>
-        </main>
+            <div class="dashboard-grid" id="quotasDashboard">
+                <!-- Quotas will be loaded here -->
+            </div>
+        </div>
 
-        <!-- Página de Contas -->
-        <main id="accounts" class="page">
+        <!-- Página Contas Bancárias -->
+        <div id="contas" class="page">
             <h2 class="page-title">Contas Bancárias</h2>
             
             <div class="card">
-                <h3>Nova Conta</h3>
+                <h3>Cadastrar Nova Conta</h3>
                 <form id="accountForm">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="accountName">Nome da Conta</label>
-                            <input type="text" id="accountName" required>
+                            <label for="accountName">Nome da Conta:</label>
+                            <input type="text" id="accountName" placeholder="Ex: Conta Corrente Banco X">
                         </div>
+                        
                         <div class="form-group">
-                            <label for="accountBank">Banco</label>
-                            <input type="text" id="accountBank" required>
+                            <label for="initialBalance">Saldo Inicial (R$):</label>
+                            <input type="number" id="initialBalance" step="0.01" placeholder="0,00">
                         </div>
                     </div>
                     
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="accountType">Tipo de Conta</label>
-                            <select id="accountType" required>
-                                <option value="checking">Conta Corrente</option>
-                                <option value="savings">Poupança</option>
-                                <option value="investment">Investimento</option>
-                                <option value="credit">Cartão de Crédito</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="accountBalance">Saldo Inicial (R$)</label>
-                            <input type="number" id="accountBalance" step="0.01" required>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-success">Adicionar Conta</button>
+                    <button type="submit" class="btn btn-success">Cadastrar Conta</button>
                 </form>
             </div>
             
-            <div id="accountsGrid" class="account-grid"></div>
-        </main>
+            <div class="dashboard-grid" id="accountsDashboard">
+                <!-- Accounts will be loaded here -->
+            </div>
+        </div>
 
-        <!-- Página de Histórico -->
-        <main id="history" class="page">
+        <!-- Página Histórico Completo -->
+        <div id="historico" class="page">
             <h2 class="page-title">Histórico Completo</h2>
             
             <div class="card">
                 <h3>Filtros</h3>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="filterStartDate">Data de Início</label>
+                        <label for="filterStartDate">Data de Início:</label>
                         <input type="date" id="filterStartDate">
                     </div>
+                    
                     <div class="form-group">
-                        <label for="filterEndDate">Data de Término</label>
+                        <label for="filterEndDate">Data de Fim:</label>
                         <input type="date" id="filterEndDate">
                     </div>
+                    
                     <div class="form-group">
-                        <label for="filterType">Tipo</label>
-                        <select id="filterType">
-                            <option value="">Todos</option>
-                            <option value="income">Receitas</option>
-                            <option value="expense">Despesas</option>
-                        </select>
+                        <button class="btn" onclick="filterTransactions()">Filtrar</button>
                     </div>
-                    <div class="form-group">
-                        <label for="filterAccount">Conta</label>
-                        <select id="filterAccount">
-                            <option value="">Todas as contas</option>
-                        </select>
-                    </div>
-                </div>
-                <button class="btn" onclick="applyFilters()">Aplicar Filtros</button>
-                <button class="btn" onclick="clearFilters()">Limpar Filtros</button>
-            </div>
-            
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-value" id="totalIncome">R$ 0,00</div>
-                    <div class="stat-label">Total de Receitas</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="totalExpenses">R$ 0,00</div>
-                    <div class="stat-label">Total de Despesas</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="netBalance">R$ 0,00</div>
-                    <div class="stat-label">Saldo Líquido</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="transactionCount">0</div>
-                    <div class="stat-label">Total de Transações</div>
                 </div>
             </div>
             
             <div class="card">
                 <h3>Todas as Movimentações</h3>
-                <div id="allTransactions" class="transaction-list"></div>
+                <div class="transaction-list" id="allTransactions">
+                    <!-- All transactions will be loaded here -->
+                </div>
             </div>
-        </main>
+        </div>
 
-        <!-- Página de Configurações -->
-        <main id="settings" class="page">
+        <!-- Página Configurações -->
+        <div id="configuracoes" class="page">
             <h2 class="page-title">Configurações</h2>
             
-            <div class="config-section">
-                <h3>Gerenciar Movimentações</h3>
+            <div class="dashboard-grid">
                 <div class="card">
-                    <div class="config-grid" id="configTransactions"></div>
-                </div>
-            </div>
-            
-            <div class="config-section">
-                <h3>Gerenciar Categorias e Subcategorias</h3>
-                <div class="card">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="categoryType">Tipo de Categoria</label>
-                            <select id="categoryType">
-                                <option value="income">Receitas</option>
-                                <option value="expense">Despesas</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="newCategory">Nova Categoria</label>
-                            <input type="text" id="newCategory" placeholder="Digite o nome da categoria">
-                        </div>
-                    </div>
-                    <button class="btn btn-success" onclick="addCustomCategory()">Adicionar Categoria</button>
-                    
-                    <div id="categoriesList" class="config-grid" style="margin-top: 20px;"></div>
-                </div>
-            </div>
-            
-            <div class="config-section">
-                <h3>Gerenciar Cotas</h3>
-                <div class="card">
-                    <div class="config-grid" id="configQuotas"></div>
-                </div>
-            </div>
-            
-            <div class="config-section">
-                <h3>Gerenciar Contas</h3>
-                <div class="card">
-                    <div class="config-grid" id="configAccounts"></div>
-                </div>
-            </div>
-            
-            <div class="config-section">
-                <h3>Backup e Restauração</h3>
-                <div class="card">
-                    <div class="config-grid">
-                        <div class="config-item">
-                            <div class="config-item-info">
-                                <div class="config-item-name">Backup Completo</div>
-                                <div class="config-item-desc">Exportar todos os dados em formato JSON</div>
-                            </div>
-                            <button class="btn" onclick="exportData()">Exportar</button>
-                        </div>
-                        <div class="config-item">
-                            <div class="config-item-info">
-                                <div class="config-item-name">Restaurar Backup</div>
-                                <div class="config-item-desc">Importar dados de arquivo JSON</div>
-                            </div>
-                            <button class="btn" onclick="importData()">Importar</button>
-                        </div>
-                        <div class="config-item">
-                            <div class="config-item-info">
-                                <div class="config-item-name">Limpar Dados</div>
-                                <div class="config-item-desc">Remover todos os dados do aplicativo</div>
-                            </div>
-                            <button class="btn btn-danger" onclick="clearAllData()">Limpar Tudo</button>
-                        </div>
+                    <h3>Gerenciar Movimentações</h3>
+                    <p>Edite ou exclua movimentações cadastradas</p>
+                    <button class="btn" onclick="showTransactionSettings()">Gerenciar</button>
+                    <div id="transactionSettings" style="display: none; margin-top: 15px;">
+                        <div class="transaction-list" id="settingsTransactions"></div>
                     </div>
                 </div>
+                
+                <div class="card">
+                    <h3>Gerenciar Cotas</h3>
+                    <p>Edite ou exclua cotas cadastradas</p>
+                    <button class="btn" onclick="showQuotaSettings()">Gerenciar</button>
+                    <div id="quotaSettings" style="display: none; margin-top: 15px;">
+                        <div id="settingsQuotas"></div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>Gerenciar Contas</h3>
+                    <p>Edite ou exclua contas bancárias</p>
+                    <button class="btn" onclick="showAccountSettings()">Gerenciar</button>
+                    <div id="accountSettings" style="display: none; margin-top: 15px;">
+                        <div id="settingsAccounts"></div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>Categorias e Subcategorias</h3>
+                    <p>Gerencie suas categorias personalizadas</p>
+                    <button class="btn" onclick="showCategorySettings()">Gerenciar</button>
+                    <div id="categorySettings" style="display: none; margin-top: 15px;">
+                        <p>Funcionalidade em desenvolvimento</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>Importar Dados</h3>
+                    <p>Importe dados de um backup</p>
+                    <input type="file" id="importFile" accept=".json" style="margin-bottom: 10px;">
+                    <button class="btn" onclick="importData()">Importar</button>
+                </div>
+                
+                <div class="card">
+                    <h3>Limpar Dados</h3>
+                    <p>Remova todos os dados do aplicativo</p>
+                    <button class="btn btn-danger" onclick="clearAllData()">Limpar Tudo</button>
+                </div>
             </div>
-        </main>
-    </div>
-
-    <!-- Modal para Edição -->
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Editar Item</h3>
-                <button class="close" onclick="closeModal()">&times;</button>
-            </div>
-            <div id="editModalBody"></div>
         </div>
     </div>
 
-    <!-- Toast para Notificações -->
-    <div id="toast" class="toast"></div>
-
-    <!-- Input para Importar Arquivo -->
-    <input type="file" id="fileInput" accept=".json" style="display: none;">
-
     <script>
-        // Dados da aplicação
-        let appData = {
-            transactions: [],
-            accounts: [],
-            quotas: [],
-            categories: {
-                income: [
-                    'Salário', 'Investimentos', 'Autônomo / Freelance', 'Empreendimento', 
-                    'Benefícios', 'Aluguéis / Patrimônio', 'Restituições', 'Outras receitas'
-                ],
-                expense: [
-                    'Alimentação', 'Habitação / Moradia', 'Transporte', 'Saúde', 'Educação',
-                    'Lazer e Cultura', 'Vestuário e Cuidados Pessoais', 'Pagamentos Financeiros',
-                    'Seguros', 'Impostos e Taxas', 'Doações e Caridade', 'Outras despesas'
-                ]
+        // Dados globais
+        let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+        let quotas = JSON.parse(localStorage.getItem('quotas')) || [];
+        let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+
+        // Categorias predefinidas
+        const categories = {
+            receita: {
+                "Salário": ["Emprego principal", "Horas extras", "13º salário", "Férias"],
+                "Investimentos": ["Juros (CDB, Tesouro, etc.)", "Dividendos (ações)", "Fundos imobiliários"],
+                "Autônomo / Freelance": ["Serviços prestados", "Consultorias", "Projetos"],
+                "Empreendimento": ["Venda de produtos", "Venda de serviços"],
+                "Benefícios": ["Aposentadoria / INSS", "Pensão", "Bolsa / Auxílio governamental"],
+                "Aluguéis / Patrimônio": ["Aluguel de imóveis", "Aluguel de veículos / equipamentos"],
+                "Restituições": ["Imposto de Renda", "Reembolsos (empresa, saúde, seguro, etc.)"],
+                "Outras receitas": ["Presentes", "Doações recebidas", "Prêmios / sorteios", "Outras"]
             },
-            subcategories: {
-                income: {
-                    'Salário': ['Emprego principal', 'Horas extras', '13º salário', 'Férias', 'Outras'],
-                    'Investimentos': ['Juros (CDB, Tesouro, etc.)', 'Dividendos (ações)', 'Fundos imobiliários', 'Criptomoedas', 'Outras'],
-                    'Autônomo / Freelance': ['Serviços prestados', 'Consultorias', 'Projetos', 'Outras'],
-                    'Empreendimento': ['Venda de produtos', 'Venda de serviços', 'Licenciamento', 'Outras'],
-                    'Benefícios': ['Aposentadoria / INSS', 'Pensão', 'Bolsa / Auxílio governamental', 'Seguro desemprego', 'Outras'],
-                    'Aluguéis / Patrimônio': ['Aluguel de imóveis', 'Aluguel de veículos / equipamentos', 'Direitos autorais', 'Outras'],
-                    'Restituições': ['Imposto de Renda', 'Reembolsos (empresa, saúde, seguro, etc.)', 'Outras'],
-                    'Outras receitas': ['Presentes', 'Doações recebidas', 'Prêmios / sorteios', 'Outras']
-                },
-                expense: {
-                    'Alimentação': ['Supermercado', 'Feira / Hortifruti', 'Padaria', 'Restaurante', 'Lanche / Fast food', 'Delivery', 'Outras'],
-                    'Habitação / Moradia': ['Aluguel', 'Financiamento / Prestação', 'Condomínio', 'Energia elétrica', 'Água / Esgoto', 'Gás', 'Internet / TV / Telefone fixo', 'Manutenção da casa', 'Outras'],
-                    'Transporte': ['Combustível', 'Transporte público (ônibus, metrô, trem)', 'Uber / Táxi / Aplicativos', 'Estacionamento / Pedágio', 'Manutenção do veículo', 'Seguro do veículo', 'IPVA / Licenciamento', 'Outras'],
-                    'Saúde': ['Plano de saúde', 'Consultas médicas', 'Exames', 'Farmácia / Remédios', 'Academia / Atividade física', 'Terapias', 'Outras'],
-                    'Educação': ['Escola / Faculdade', 'Cursos / Especializações', 'Livros / Material didático', 'Outras'],
-                    'Lazer e Cultura': ['Cinema / Teatro / Shows', 'Viagem', 'Passeios', 'Restaurantes', 'Assinaturas (Netflix, Spotify, etc.)', 'Hobbies', 'Outras'],
-                    'Vestuário e Cuidados Pessoais': ['Roupas', 'Calçados', 'Acessórios', 'Salão / Barbearia / Estética', 'Cosméticos / Perfumaria', 'Outras'],
-                    'Pagamentos Financeiros': ['Tarifas bancárias', 'Juros / Multas', 'Empréstimos', 'Cartão de crédito', 'Financiamentos', 'Outras'],
-                    'Seguros': ['Vida', 'Residência', 'Veículo', 'Saúde suplementar', 'Outras'],
-                    'Impostos e Taxas': ['IPTU', 'IPVA', 'Imposto de Renda a pagar', 'Taxa de Bombeiros', 'Taxas diversas (cartório, etc.)', 'Outras'],
-                    'Doações e Caridade': ['Igrejas', 'ONGs', 'Ações sociais', 'Outras'],
-                    'Outras despesas': ['Presentes', 'Animais de estimação (ração, veterinário, banho/tosa)', 'Reparos emergenciais', 'Multas diversas', 'Outras']
-                }
+            despesa: {
+                "Alimentação": ["Supermercado", "Feira / Hortifruti", "Padaria", "Restaurante", "Lanche / Fast food", "Delivery"],
+                "Habitação / Moradia": ["Aluguel", "Financiamento / Prestação", "Condomínio", "Energia elétrica", "Água / Esgoto", "Gás", "Internet / TV / Telefone fixo", "Manutenção da casa"],
+                "Transporte": ["Combustível", "Transporte público (ônibus, metrô, trem)", "Uber / Táxi / Aplicativos", "Estacionamento / Pedágio", "Manutenção do veículo", "Seguro do veículo", "IPVA / Licenciamento"],
+                "Saúde": ["Plano de saúde", "Consultas médicas", "Exames", "Farmácia / Remédios", "Academia / Atividade física", "Terapias"],
+                "Educação": ["Escola / Faculdade", "Cursos / Especializações", "Livros / Material didático"],
+                "Lazer e Cultura": ["Cinema / Teatro / Shows", "Viagem", "Passeios", "Restaurantes", "Assinaturas (Netflix, Spotify, etc.)", "Hobbies"],
+                "Vestuário e Cuidados Pessoais": ["Roupas", "Calçados", "Acessórios", "Salão / Barbearia / Estética", "Cosméticos / Perfumaria"],
+                "Pagamentos Financeiros": ["Tarifas bancárias", "Juros / Multas", "Empréstimos", "Cartão de crédito", "Financiamentos"],
+                "Seguros": ["Vida", "Residência", "Veículo", "Saúde suplementar"],
+                "Impostos e Taxas": ["IPTU", "IPVA", "Imposto de Renda a pagar", "Taxa de Bombeiros", "Taxas diversas (cartório, etc.)"],
+                "Doações e Caridade": ["Igrejas", "ONGs", "Ações sociais"],
+                "Outras despesas": ["Presentes", "Animais de estimação (ração, veterinário, banho/tosa)", "Reparos emergenciais", "Multas diversas", "Outras"]
             }
         };
 
-        // Inicialização da aplicação
+        // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
-            // Prevenir zoom no iOS
-            document.addEventListener('gesturestart', function (e) {
-                e.preventDefault();
-            });
+            loadAccounts();
+            loadQuotas();
+            loadTransactions();
+            loadRecentTransactions();
+            loadFutureTransactions();
+            loadAllTransactions();
+            loadQuotasDashboard();
+            loadAccountsDashboard();
             
-            // Melhorar performance em dispositivos touch
-            if ('ontouchstart' in window) {
-                document.body.style.cursor = 'pointer';
-            }
+            // Set today's date as default
+            document.getElementById('date').value = new Date().toISOString().split('T')[0];
             
-            loadData();
-            updateCategories();
-            updateAccountOptions();
-            updateQuotaOptions();
-            updateFilterOptions();
-            updateTransactionDisplay();
-            updateQuotasDisplay();
-            updateAccountsDisplay();
-            updateHistoryDisplay();
-            updateSettingsDisplay();
-            setupQuotaNameAutocomplete();
-            
-            // Event listeners
-            document.getElementById('transactionType').addEventListener('change', updateCategories);
-            document.getElementById('transactionCategory').addEventListener('change', updateSubcategories);
-            document.getElementById('transactionSubcategory').addEventListener('change', handleSubcategoryChange);
-            document.getElementById('isRecurring').addEventListener('change', toggleRecurringOptions);
-            document.getElementById('transactionForm').addEventListener('submit', addTransaction);
-            document.getElementById('accountForm').addEventListener('submit', addAccount);
-            document.getElementById('quotaForm').addEventListener('submit', addQuota);
-            document.getElementById('fileInput').addEventListener('change', handleFileImport);
-            document.getElementById('categoryType').addEventListener('change', updateCategoriesListDisplay);
-            
-            // Definir data atual como padrão
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('transactionDate').value = today;
-            document.getElementById('quotaStartDate').value = today;
-            
-            // Definir data final da cota como último dia do mês
-            const lastDayOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).toISOString().split('T')[0];
-            document.getElementById('quotaEndDate').value = lastDayOfMonth;
-            
-            // Verificar movimentações recorrentes
-            checkRecurringTransactions();
-            
-            // Detectar se está rodando como PWA
-            if (window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches) {
-                document.body.classList.add('pwa-mode');
-            }
+            // Auto-process future transactions
+            processFutureTransactions();
         });
 
         // Navegação entre páginas
         function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
             
+            // Remove active class from all nav buttons
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected page
             document.getElementById(pageId).classList.add('active');
             
-            // Encontrar o botão correto usando data-page
-            const activeBtn = document.querySelector(`[data-page="${pageId}"]`);
-            if (activeBtn) {
-                activeBtn.classList.add('active');
-            }
+            // Add active class to clicked button
+            event.target.classList.add('active');
             
-            // Scroll para o topo
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            
-            // Atualizar dados quando mudar de página
-            switch(pageId) {
-                case 'transactions':
-                    updateTransactionDisplay();
-                    break;
-                case 'quotas':
-                    updateQuotasDisplay();
-                    break;
-                case 'accounts':
-                    updateAccountsDisplay();
-                    break;
-                case 'history':
-                    updateHistoryDisplay();
-                    break;
-                case 'settings':
-                    updateSettingsDisplay();
-                    break;
+            // Reload data for specific pages
+            if (pageId === 'movimentacoes') {
+                loadRecentTransactions();
+                loadFutureTransactions();
+            } else if (pageId === 'cotas') {
+                loadQuotasDashboard();
+            } else if (pageId === 'contas') {
+                loadAccountsDashboard();
+            } else if (pageId === 'historico') {
+                loadAllTransactions();
             }
         }
 
-        // Funções de movimentações
+        // Atualizar categorias baseado no tipo
         function updateCategories() {
             const type = document.getElementById('transactionType').value;
-            const categorySelect = document.getElementById('transactionCategory');
+            const categorySelect = document.getElementById('category');
+            const subcategoryGroup = document.getElementById('subcategoryGroup');
             
-            categorySelect.innerHTML = '<option value="">Selecione a categoria</option>';
+            // Clear previous options
+            categorySelect.innerHTML = '<option value="">Selecione uma categoria</option>';
+            subcategoryGroup.style.display = 'none';
             
-            if (type && appData.categories[type]) {
-                appData.categories[type].forEach(category => {
+            if (type && categories[type]) {
+                Object.keys(categories[type]).forEach(category => {
                     const option = document.createElement('option');
                     option.value = category;
                     option.textContent = category;
                     categorySelect.appendChild(option);
                 });
             }
-            
-            // Limpar subcategorias
-            document.getElementById('subcategoryGroup').style.display = 'none';
-            document.getElementById('customSubcategoryGroup').style.display = 'none';
         }
 
+        // Atualizar subcategorias baseado na categoria
         function updateSubcategories() {
             const type = document.getElementById('transactionType').value;
-            const category = document.getElementById('transactionCategory').value;
+            const category = document.getElementById('category').value;
+            const subcategorySelect = document.getElementById('subcategory');
             const subcategoryGroup = document.getElementById('subcategoryGroup');
-            const subcategorySelect = document.getElementById('transactionSubcategory');
-            const customGroup = document.getElementById('customSubcategoryGroup');
+            const otherSubcategoryGroup = document.getElementById('otherSubcategoryGroup');
             
-            if (type && category && appData.subcategories[type] && appData.subcategories[type][category]) {
-                subcategorySelect.innerHTML = '<option value="">Selecione a subcategoria</option>';
-                
-                appData.subcategories[type][category].forEach(subcategory => {
+            // Clear previous options
+            subcategorySelect.innerHTML = '<option value="">Selecione uma subcategoria</option>';
+            otherSubcategoryGroup.style.display = 'none';
+            
+            if (type && category && categories[type][category]) {
+                categories[type][category].forEach(subcategory => {
                     const option = document.createElement('option');
                     option.value = subcategory;
                     option.textContent = subcategory;
                     subcategorySelect.appendChild(option);
                 });
-                
                 subcategoryGroup.style.display = 'block';
             } else {
                 subcategoryGroup.style.display = 'none';
             }
-            
-            customGroup.style.display = 'none';
         }
 
-        function handleSubcategoryChange() {
-            const subcategory = document.getElementById('transactionSubcategory').value;
-            const customGroup = document.getElementById('customSubcategoryGroup');
+        // Toggle campo "Outras" para subcategorias
+        function toggleOtherSubcategory() {
+            const subcategory = document.getElementById('subcategory').value;
+            const otherSubcategoryGroup = document.getElementById('otherSubcategoryGroup');
             
             if (subcategory === 'Outras') {
-                customGroup.style.display = 'block';
+                otherSubcategoryGroup.style.display = 'block';
             } else {
-                customGroup.style.display = 'none';
-                document.getElementById('customSubcategory').value = '';
+                otherSubcategoryGroup.style.display = 'none';
             }
         }
 
-        function setupQuotaNameAutocomplete() {
-            const input = document.getElementById('quotaName');
-            const suggestions = document.getElementById('quotaNameSuggestions');
-            const container = input.closest('.autocomplete-container');
-            
-            // Mostrar sugestões ao clicar na seta ou focar no campo
-            input.addEventListener('focus', showQuotaSuggestions);
-            input.addEventListener('input', filterQuotaSuggestions);
-            container.querySelector('.dropdown-arrow').addEventListener('click', showQuotaSuggestions);
-            
-            // Esconder sugestões ao clicar fora
-            document.addEventListener('click', function(e) {
-                if (!container.contains(e.target)) {
-                    suggestions.style.display = 'none';
-                }
-            });
-        }
-
+        // Mostrar sugestões de cotas
         function showQuotaSuggestions() {
-            const suggestions = document.getElementById('quotaNameSuggestions');
-            const expenseCategories = appData.categories.expense;
-            
-            suggestions.innerHTML = '';
-            
-            expenseCategories.forEach(category => {
-                const div = document.createElement('div');
-                div.className = 'autocomplete-suggestion';
-                div.textContent = category;
-                div.addEventListener('click', function() {
-                    document.getElementById('quotaName').value = category;
-                    suggestions.style.display = 'none';
-                });
-                suggestions.appendChild(div);
-            });
-            
-            suggestions.style.display = 'block';
-        }
-
-        function filterQuotaSuggestions() {
             const input = document.getElementById('quotaName');
-            const suggestions = document.getElementById('quotaNameSuggestions');
+            const suggestions = document.getElementById('quotaSuggestions');
             const value = input.value.toLowerCase();
-            const expenseCategories = appData.categories.expense;
+            
+            if (value.length === 0) {
+                suggestions.style.display = 'none';
+                return;
+            }
             
             suggestions.innerHTML = '';
             
-            const filtered = expenseCategories.filter(category => 
-                category.toLowerCase().startsWith(value)
+            // Get expense categories as suggestions
+            const expenseCategories = Object.keys(categories.despesa);
+            const filtered = expenseCategories.filter(cat => 
+                cat.toLowerCase().includes(value)
             );
             
-            if (filtered.length > 0 && value) {
+            if (filtered.length > 0) {
                 filtered.forEach(category => {
-                    const div = document.createElement('div');
-                    div.className = 'autocomplete-suggestion';
-                    div.textContent = category;
-                    div.addEventListener('click', function() {
+                    const item = document.createElement('div');
+                    item.className = 'autocomplete-item';
+                    item.textContent = category;
+                    item.onclick = () => {
                         input.value = category;
                         suggestions.style.display = 'none';
-                    });
-                    suggestions.appendChild(div);
+                    };
+                    suggestions.appendChild(item);
                 });
                 suggestions.style.display = 'block';
             } else {
@@ -1484,1060 +1357,753 @@
             }
         }
 
-        function updateAccountOptions() {
-            const selects = document.querySelectorAll('#transactionAccount, #filterAccount');
+        // Carregar contas no select
+        function loadAccounts() {
+            const accountSelect = document.getElementById('account');
+            accountSelect.innerHTML = '<option value="">Selecione uma conta</option>';
             
-            selects.forEach(select => {
-                const currentValue = select.value;
-                const isFilter = select.id === 'filterAccount';
-                
-                select.innerHTML = isFilter ? 
-                    '<option value="">Todas as contas</option>' : 
-                    '<option value="">Selecione a conta</option>';
-                
-                appData.accounts.forEach(account => {
-                    const option = document.createElement('option');
-                    option.value = account.id;
-                    option.textContent = `${account.name} - ${account.bank}`;
-                    select.appendChild(option);
-                });
-                
-                if (currentValue) select.value = currentValue;
+            accounts.forEach(account => {
+                const option = document.createElement('option');
+                option.value = account.id;
+                option.textContent = account.name;
+                accountSelect.appendChild(option);
             });
         }
 
-        function updateQuotaOptions() {
-            const select = document.getElementById('transactionQuota');
-            const currentValue = select.value;
+        // Carregar cotas no select
+        function loadQuotas() {
+            const quotaSelect = document.getElementById('quota');
+            quotaSelect.innerHTML = '<option value="">Selecione uma cota</option>';
             
-            select.innerHTML = '<option value="">Nenhuma cota</option>';
+            quotas.forEach(quota => {
+                const option = document.createElement('option');
+                option.value = quota.id;
+                option.textContent = quota.name;
+                quotaSelect.appendChild(option);
+            });
+        }
+
+        // Processar transações futuras
+        function processFutureTransactions() {
+            const today = new Date().toISOString().split('T')[0];
+            const newTransactions = [];
             
-            appData.quotas.forEach(quota => {
-                if (isQuotaActive(quota)) {
-                    const option = document.createElement('option');
-                    option.value = quota.id;
-                    option.textContent = quota.name;
-                    select.appendChild(option);
+            transactions.forEach(transaction => {
+                if (transaction.date <= today && transaction.recurrence !== 'unica' && transaction.type === 'future') {
+                    // Convert future transaction to completed
+                    transaction.type = 'completed';
+                    newTransactions.push(transaction);
+                    
+                    // Create next occurrence if recurrence is set
+                    if (transaction.recurrence !== 'unica') {
+                        const nextDate = calculateNextOccurrence(transaction.date, transaction.recurrence);
+                        if (nextDate) {
+                            const futureTransaction = {
+                                ...transaction,
+                                id: Date.now() + Math.random(),
+                                date: nextDate,
+                                type: 'future'
+                            };
+                            transactions.push(futureTransaction);
+                        }
+                    }
                 }
             });
             
-            if (currentValue) select.value = currentValue;
+            if (newTransactions.length > 0) {
+                saveData();
+                loadRecentTransactions();
+                loadFutureTransactions();
+            }
         }
 
-        function toggleRecurringOptions() {
-            const isRecurring = document.getElementById('isRecurring').checked;
-            const recurringOptions = document.getElementById('recurringOptions');
-            recurringOptions.style.display = isRecurring ? 'block' : 'none';
-        }
-
-        function addTransaction(event) {
-            event.preventDefault();
+        // Calcular próxima ocorrência
+        function calculateNextOccurrence(date, recurrence) {
+            const currentDate = new Date(date);
             
-            const subcategory = document.getElementById('transactionSubcategory').value;
-            const customSubcategory = document.getElementById('customSubcategory').value;
-            const finalSubcategory = subcategory === 'Outras' && customSubcategory ? customSubcategory : subcategory;
+            switch (recurrence) {
+                case 'diaria':
+                    currentDate.setDate(currentDate.getDate() + 1);
+                    break;
+                case 'semanal':
+                    currentDate.setDate(currentDate.getDate() + 7);
+                    break;
+                case 'quinzenal':
+                    currentDate.setDate(currentDate.getDate() + 15);
+                    break;
+                case 'mensal':
+                    currentDate.setMonth(currentDate.getMonth() + 1);
+                    break;
+                case 'trimestral':
+                    currentDate.setMonth(currentDate.getMonth() + 3);
+                    break;
+                case 'semestral':
+                    currentDate.setMonth(currentDate.getMonth() + 6);
+                    break;
+                case 'anual':
+                    currentDate.setFullYear(currentDate.getFullYear() + 1);
+                    break;
+                default:
+                    return null;
+            }
+            
+            return currentDate.toISOString().split('T')[0];
+        }
+
+        // Formulário de transações
+        document.getElementById('transactionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const type = document.getElementById('transactionType').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            const date = document.getElementById('date').value;
+            const description = document.getElementById('description').value;
+            const category = document.getElementById('category').value;
+            const subcategory = document.getElementById('subcategory').value;
+            const otherSubcategory = document.getElementById('otherSubcategory').value;
+            const accountId = document.getElementById('account').value;
+            const quotaId = document.getElementById('quota').value;
+            const recurrence = document.getElementById('recurrence').value;
+            
+            if (!type || !amount || !date || !description || !category || !accountId) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+            
+            const finalSubcategory = subcategory === 'Outras' ? otherSubcategory : subcategory;
+            const today = new Date().toISOString().split('T')[0];
+            const transactionType = date <= today ? 'completed' : 'future';
             
             const transaction = {
-                id: Date.now().toString(),
-                type: document.getElementById('transactionType').value,
-                category: document.getElementById('transactionCategory').value,
-                subcategory: finalSubcategory || '',
-                amount: parseFloat(document.getElementById('transactionAmount').value),
-                date: document.getElementById('transactionDate').value,
-                account: document.getElementById('transactionAccount').value,
-                quota: document.getElementById('transactionQuota').value || null,
-                description: document.getElementById('transactionDescription').value,
-                isRecurring: document.getElementById('isRecurring').checked,
-                recurringFrequency: document.getElementById('recurringFrequency').value,
-                recurringEndDate: document.getElementById('recurringEndDate').value || null,
-                created: new Date().toISOString()
+                id: Date.now(),
+                type: transactionType,
+                category: type,
+                amount: type === 'receita' ? amount : -amount,
+                date,
+                description,
+                categoryName: category,
+                subcategory: finalSubcategory,
+                accountId,
+                quotaId,
+                recurrence
             };
             
-            appData.transactions.push(transaction);
+            transactions.push(transaction);
             
-            // Se for recorrente, criar as próximas ocorrências
-            if (transaction.isRecurring) {
-                createRecurringTransactions(transaction);
+            // Update account balance if it's a completed transaction
+            if (transactionType === 'completed') {
+                updateAccountBalance(accountId, transaction.amount);
             }
             
-            event.target.reset();
-            document.getElementById('transactionDate').value = new Date().toISOString().split('T')[0];
-            updateCategories();
-            updateTransactionDisplay();
-            updateQuotasDisplay();
-            updateAccountsDisplay();
+            // Update quota if assigned and it's an expense
+            if (quotaId && type === 'despesa') {
+                updateQuotaUsed(quotaId, Math.abs(amount));
+            }
+            
             saveData();
-            showToast('Movimentação adicionada com sucesso!');
-        }
+            this.reset();
+            document.getElementById('date').value = new Date().toISOString().split('T')[0];
+            document.getElementById('subcategoryGroup').style.display = 'none';
+            document.getElementById('otherSubcategoryGroup').style.display = 'none';
+            
+            loadRecentTransactions();
+            loadFutureTransactions();
+            loadQuotasDashboard();
+            loadAccountsDashboard();
+            
+            alert('Movimentação adicionada com sucesso!');
+        });
 
-        function createRecurringTransactions(baseTransaction) {
-            const startDate = new Date(baseTransaction.date);
-            const endDate = baseTransaction.recurringEndDate ? new Date(baseTransaction.recurringEndDate) : new Date(2025, 11, 31);
-            const frequency = baseTransaction.recurringFrequency;
-            
-            let currentDate = new Date(startDate);
-            
-            while (currentDate <= endDate) {
-                // Avançar para a próxima data baseada na frequência
-                switch (frequency) {
-                    case 'daily':
-                        currentDate.setDate(currentDate.getDate() + 1);
-                        break;
-                    case 'weekly':
-                        currentDate.setDate(currentDate.getDate() + 7);
-                        break;
-                    case 'biweekly':
-                        currentDate.setDate(currentDate.getDate() + 14);
-                        break;
-                    case 'monthly':
-                        currentDate.setMonth(currentDate.getMonth() + 1);
-                        break;
-                    case 'quarterly':
-                        currentDate.setMonth(currentDate.getMonth() + 3);
-                        break;
-                    case 'semiannual':
-                        currentDate.setMonth(currentDate.getMonth() + 6);
-                        break;
-                    case 'annual':
-                        currentDate.setFullYear(currentDate.getFullYear() + 1);
-                        break;
-                }
-                
-                if (currentDate <= endDate) {
-                    const recurringTransaction = {
-                        ...baseTransaction,
-                        id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
-                        date: currentDate.toISOString().split('T')[0],
-                        parentId: baseTransaction.id
-                    };
-                    appData.transactions.push(recurringTransaction);
-                }
+        // Atualizar saldo da conta
+        function updateAccountBalance(accountId, amount) {
+            const account = accounts.find(acc => acc.id === accountId);
+            if (account) {
+                account.balance += amount;
             }
         }
 
-        function checkRecurringTransactions() {
-            // Esta função seria chamada quando o app é aberto para verificar
-            // se há movimentações recorrentes que devem ser executadas
-            const today = new Date().toISOString().split('T')[0];
-            
-            appData.transactions.forEach(transaction => {
-                if (transaction.isRecurring && transaction.date <= today && !transaction.executed) {
-                    transaction.executed = true;
-                }
-            });
-            
-            saveData();
+        // Atualizar valor usado da cota
+        function updateQuotaUsed(quotaId, amount) {
+            const quota = quotas.find(q => q.id === quotaId);
+            if (quota) {
+                quota.used = (quota.used || 0) + amount;
+            }
         }
 
-        function updateTransactionDisplay() {
-            displayRecentTransactions();
-            displayFutureTransactions();
-        }
-
-        function displayRecentTransactions() {
+        // Carregar transações recentes
+        function loadRecentTransactions() {
             const container = document.getElementById('recentTransactions');
-            const recentTransactions = appData.transactions
-                .filter(t => new Date(t.date) <= new Date())
+            const recentTransactions = transactions
+                .filter(t => t.type === 'completed')
                 .sort((a, b) => new Date(b.date) - new Date(a.date))
                 .slice(0, 50);
             
-            container.innerHTML = '';
-            
-            if (recentTransactions.length === 0) {
-                container.innerHTML = '<p>Nenhuma movimentação encontrada.</p>';
-                return;
-            }
-            
-            recentTransactions.forEach(transaction => {
-                const item = createTransactionItem(transaction);
-                container.appendChild(item);
-            });
+            displayTransactions(container, recentTransactions);
         }
 
-        function displayFutureTransactions() {
+        // Carregar transações futuras
+        function loadFutureTransactions() {
             const container = document.getElementById('futureTransactions');
-            const futureTransactions = appData.transactions
-                .filter(t => new Date(t.date) > new Date())
+            const futureTransactions = transactions
+                .filter(t => t.type === 'future')
                 .sort((a, b) => new Date(a.date) - new Date(b.date));
             
-            container.innerHTML = '';
+            displayTransactions(container, futureTransactions);
+        }
+
+        // Carregar todas as transações
+        function loadAllTransactions() {
+            const container = document.getElementById('allTransactions');
+            const allTransactions = transactions
+                .filter(t => t.type === 'completed')
+                .sort((a, b) => new Date(b.date) - new Date(a.date));
             
-            if (futureTransactions.length === 0) {
-                container.innerHTML = '<p>Nenhum lançamento futuro encontrado.</p>';
+            displayTransactions(container, allTransactions);
+        }
+
+        // Exibir transações
+        function displayTransactions(container, transactionList) {
+            if (transactionList.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 20px;">Nenhuma movimentação encontrada.</p>';
                 return;
             }
             
-            futureTransactions.forEach(transaction => {
-                const item = createTransactionItem(transaction);
-                container.appendChild(item);
-            });
-        }
-
-        function createTransactionItem(transaction) {
-            const div = document.createElement('div');
-            div.className = 'transaction-item';
-            
-            const account = appData.accounts.find(a => a.id === transaction.account);
-            const accountName = account ? account.name : 'Conta não encontrada';
-            
-            const categoryText = transaction.subcategory ? 
-                `${transaction.category} - ${transaction.subcategory}` : 
-                transaction.category;
-            
-            div.innerHTML = `
-                <div class="transaction-info">
-                    <div class="transaction-date">${formatDate(transaction.date)} - ${accountName}</div>
-                    <div class="transaction-desc">${transaction.description}</div>
-                    <div class="transaction-category">${categoryText}</div>
-                </div>
-                <div class="transaction-amount ${transaction.type === 'income' ? 'amount-positive' : 'amount-negative'}">
-                    ${transaction.type === 'income' ? '+' : '-'} ${formatCurrency(transaction.amount)}
-                </div>
-                <div class="transaction-actions">
-                    <button class="icon-btn" onclick="editTransaction('${transaction.id}')" title="Editar">
-                        ✏️
-                    </button>
-                    <button class="icon-btn" onclick="deleteTransaction('${transaction.id}')" title="Excluir">
-                        ❌
-                    </button>
-                </div>
-            `;
-            
-            return div;
-        }
-
-        // Funções de contas
-        function addAccount(event) {
-            event.preventDefault();
-            
-            const account = {
-                id: Date.now().toString(),
-                name: document.getElementById('accountName').value,
-                bank: document.getElementById('accountBank').value,
-                type: document.getElementById('accountType').value,
-                balance: parseFloat(document.getElementById('accountBalance').value),
-                initialBalance: parseFloat(document.getElementById('accountBalance').value),
-                created: new Date().toISOString()
-            };
-            
-            appData.accounts.push(account);
-            
-            event.target.reset();
-            updateAccountOptions();
-            updateAccountsDisplay();
-            saveData();
-            showToast('Conta adicionada com sucesso!');
-        }
-
-        function updateAccountsDisplay() {
-            const container = document.getElementById('accountsGrid');
-            container.innerHTML = '';
-            
-            appData.accounts.forEach(account => {
-                const currentBalance = calculateAccountBalance(account.id);
-                const div = document.createElement('div');
-                div.className = 'account-card';
+            container.innerHTML = transactionList.map(transaction => {
+                const account = accounts.find(acc => acc.id === transaction.accountId);
+                const quota = quotas.find(q => q.id === transaction.quotaId);
+                const amountClass = transaction.amount >= 0 ? 'amount-positive' : 'amount-negative';
                 
-                div.innerHTML = `
-                    <div class="account-header">
-                        <div class="account-name">${account.name}</div>
-                        <div class="account-actions">
-                            <button class="icon-btn" onclick="editAccount('${account.id}')" title="Editar">
-                                ✏️
-                            </button>
-                            <button class="icon-btn" onclick="deleteAccount('${account.id}')" title="Excluir">
-                                ❌
-                            </button>
+                return `
+                    <div class="transaction-item">
+                        <div class="transaction-info">
+                            <div class="transaction-date">${formatDate(transaction.date)}</div>
+                            <div class="transaction-desc">${transaction.description}</div>
+                            <div class="transaction-category">${transaction.categoryName} ${transaction.subcategory ? '› ' + transaction.subcategory : ''}</div>
+                        </div>
+                        <div class="transaction-amount ${amountClass}">
+                            R$ ${Math.abs(transaction.amount).toFixed(2).replace('.', ',')}
+                        </div>
+                        <div class="transaction-actions">
+                            <button class="icon-btn" onclick="editTransaction(${transaction.id})" title="Editar">✏️</button>
+                            <button class="icon-btn" onclick="deleteTransaction(${transaction.id})" title="Excluir">❌</button>
                         </div>
                     </div>
-                    <div style="margin-bottom: 10px; color: #6b7280;">${account.bank}</div>
-                    <div style="margin-bottom: 10px; color: #6b7280;">${getAccountTypeLabel(account.type)}</div>
-                    <div class="account-balance ${currentBalance >= 0 ? 'amount-positive' : 'amount-negative'}">
-                        ${formatCurrency(currentBalance)}
-                    </div>
-                    <div class="account-actions">
-                        <button class="btn" onclick="showAccountDetails('${account.id}')">Detalhamento</button>
-                    </div>
                 `;
-                
-                container.appendChild(div);
-            });
+            }).join('');
         }
 
-        function calculateAccountBalance(accountId) {
-            const account = appData.accounts.find(a => a.id === accountId);
-            if (!account) return 0;
-            
-            let balance = account.initialBalance;
-            
-            appData.transactions
-                .filter(t => t.account === accountId && new Date(t.date) <= new Date())
-                .forEach(transaction => {
-                    if (transaction.type === 'income') {
-                        balance += transaction.amount;
-                    } else {
-                        balance -= transaction.amount;
-                    }
-                });
-            
-            return balance;
+        // Formatar data
+        function formatDate(dateString) {
+            return new Date(dateString + 'T00:00:00').toLocaleDateString('pt-BR');
         }
 
-        function getAccountTypeLabel(type) {
-            const labels = {
-                checking: 'Conta Corrente',
-                savings: 'Poupança',
-                investment: 'Investimento',
-                credit: 'Cartão de Crédito'
-            };
-            return labels[type] || type;
-        }
-
-        // Funções de cotas
-        function addQuota(event) {
-            event.preventDefault();
+        // Formulário de cotas
+        document.getElementById('quotaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('quotaName').value;
+            const amount = parseFloat(document.getElementById('quotaAmount').value);
+            const startDate = document.getElementById('quotaStartDate').value;
+            const endDate = document.getElementById('quotaEndDate').value;
+            
+            if (!name || !amount || !startDate || !endDate) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
             
             const quota = {
                 id: Date.now().toString(),
-                name: document.getElementById('quotaName').value,
-                amount: parseFloat(document.getElementById('quotaAmount').value),
-                startDate: document.getElementById('quotaStartDate').value,
-                endDate: document.getElementById('quotaEndDate').value,
-                created: new Date().toISOString()
+                name,
+                amount,
+                used: 0,
+                startDate,
+                endDate
             };
             
-            appData.quotas.push(quota);
-            
-            event.target.reset();
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('quotaStartDate').value = today;
-            const lastDayOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).toISOString().split('T')[0];
-            document.getElementById('quotaEndDate').value = lastDayOfMonth;
-            
-            updateQuotaOptions();
-            updateQuotasDisplay();
+            quotas.push(quota);
             saveData();
-            showToast('Cota criada com sucesso!');
-        }
-
-        function updateQuotasDisplay() {
-            const container = document.getElementById('quotasGrid');
-            container.innerHTML = '';
+            this.reset();
+            loadQuotas();
+            loadQuotasDashboard();
             
-            appData.quotas.forEach(quota => {
-                const spent = calculateQuotaSpent(quota.id);
-                const remaining = quota.amount - spent;
-                const percentage = (spent / quota.amount) * 100;
-                
-                let cardClass = 'quota-card';
-                let progressClass = 'quota-progress-bar';
-                
-                if (remaining < 0) {
-                    cardClass += ' negative';
-                    progressClass += ' negative';
-                } else if (remaining < quota.amount * 0.2) {
-                    cardClass += ' warning';
-                    progressClass += ' warning';
-                } else {
-                    cardClass += ' positive';
-                    progressClass += ' positive';
-                }
-                
-                const div = document.createElement('div');
-                div.className = cardClass;
-                
-                div.innerHTML = `
-                    <div class="quota-header">
-                        <div class="quota-name">${quota.name}</div>
-                        <div>
-                            <button class="icon-btn" onclick="editQuota('${quota.id}')" title="Editar">
-                                ✏️
-                            </button>
-                            <button class="icon-btn" onclick="deleteQuota('${quota.id}')" title="Excluir">
-                                ❌
-                            </button>
-                        </div>
-                    </div>
-                    <div style="margin-bottom: 10px; font-size: 12px; color: #6b7280;">
-                        ${formatDate(quota.startDate)} até ${formatDate(quota.endDate)}
-                    </div>
-                    <div class="quota-progress">
-                        <div class="${progressClass}" style="width: ${Math.min(percentage, 100)}%"></div>
-                    </div>
-                    <div class="quota-amounts">
-                        <span>Gasto: ${formatCurrency(spent)}</span>
-                        <span>Restante: ${formatCurrency(remaining)}</span>
-                    </div>
-                    <div style="text-align: center; margin-top: 10px; font-weight: 600;">
-                        ${formatCurrency(quota.amount)}
-                    </div>
-                `;
-                
-                container.appendChild(div);
-            });
-        }
+            alert('Cota criada com sucesso!');
+        });
 
-        function calculateQuotaSpent(quotaId) {
-            return appData.transactions
-                .filter(t => t.quota === quotaId && t.type === 'expense' && new Date(t.date) <= new Date())
-                .reduce((sum, t) => sum + t.amount, 0);
-        }
-
-        function isQuotaActive(quota) {
-            const today = new Date();
-            const startDate = new Date(quota.startDate);
-            const endDate = new Date(quota.endDate);
-            return today >= startDate && today <= endDate;
-        }
-
-        // Funções de histórico
-        function updateHistoryDisplay() {
-            calculateStats();
-            displayAllTransactions();
-            updateFilterOptions();
-        }
-
-        function calculateStats() {
-            const filteredTransactions = getFilteredTransactions();
+        // Carregar dashboard de cotas
+        function loadQuotasDashboard() {
+            const container = document.getElementById('quotasDashboard');
             
-            const totalIncome = filteredTransactions
-                .filter(t => t.type === 'income')
-                .reduce((sum, t) => sum + t.amount, 0);
-            
-            const totalExpenses = filteredTransactions
-                .filter(t => t.type === 'expense')
-                .reduce((sum, t) => sum + t.amount, 0);
-            
-            document.getElementById('totalIncome').textContent = formatCurrency(totalIncome);
-            document.getElementById('totalExpenses').textContent = formatCurrency(totalExpenses);
-            document.getElementById('netBalance').textContent = formatCurrency(totalIncome - totalExpenses);
-            document.getElementById('transactionCount').textContent = filteredTransactions.length;
-        }
-
-        function displayAllTransactions() {
-            const container = document.getElementById('allTransactions');
-            const filteredTransactions = getFilteredTransactions()
-                .sort((a, b) => new Date(b.date) - new Date(a.date));
-            
-            container.innerHTML = '';
-            
-            if (filteredTransactions.length === 0) {
-                container.innerHTML = '<p>Nenhuma movimentação encontrada com os filtros aplicados.</p>';
+            if (quotas.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 20px;">Nenhuma cota cadastrada.</p>';
                 return;
             }
             
-            filteredTransactions.forEach(transaction => {
-                const item = createTransactionItem(transaction);
-                container.appendChild(item);
-            });
+            container.innerHTML = quotas.map(quota => {
+                const percentage = (quota.used / quota.amount) * 100;
+                const remaining = quota.amount - quota.used;
+                
+                let statusClass = 'positive';
+                if (remaining < 0) statusClass = 'negative';
+                else if (percentage > 80) statusClass = 'warning';
+                
+                return `
+                    <div class="quota-card ${statusClass}">
+                        <div class="quota-header">
+                            <div class="quota-name">${quota.name}</div>
+                            <div class="transaction-actions">
+                                <button class="icon-btn" onclick="editQuota('${quota.id}')" title="Editar">✏️</button>
+                                <button class="icon-btn" onclick="deleteQuota('${quota.id}')" title="Excluir">❌</button>
+                            </div>
+                        </div>
+                        <div class="quota-progress">
+                            <div class="quota-progress-bar ${statusClass}" style="width: ${Math.min(percentage, 100)}%"></div>
+                        </div>
+                        <div class="quota-amounts">
+                            <span class="quota-used">Usado: R$ ${quota.used.toFixed(2).replace('.', ',')}</span>
+                            <span class="quota-total">Total: R$ ${quota.amount.toFixed(2).replace('.', ',')}</span>
+                        </div>
+                        <div class="quota-amounts">
+                            <span class="quota-remaining ${remaining >= 0 ? 'status-positive' : 'status-negative'}">
+                                Restante: R$ ${remaining.toFixed(2).replace('.', ',')}
+                            </span>
+                            <span>${percentage.toFixed(1)}%</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
-        function getFilteredTransactions() {
-            let transactions = [...appData.transactions];
+        // Formulário de contas
+        document.getElementById('accountForm').addEventListener('submit', function(e) {
+            e.preventDefault();
             
+            const name = document.getElementById('accountName').value;
+            const balance = parseFloat(document.getElementById('initialBalance').value) || 0;
+            
+            if (!name) {
+                alert('Por favor, preencha o nome da conta.');
+                return;
+            }
+            
+            const account = {
+                id: Date.now().toString(),
+                name,
+                balance
+            };
+            
+            accounts.push(account);
+            saveData();
+            this.reset();
+            loadAccounts();
+            loadAccountsDashboard();
+            
+            alert('Conta cadastrada com sucesso!');
+        });
+
+        // Carregar dashboard de contas
+        function loadAccountsDashboard() {
+            const container = document.getElementById('accountsDashboard');
+            
+            if (accounts.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 20px;">Nenhuma conta cadastrada.</p>';
+                return;
+            }
+            
+            container.innerHTML = accounts.map(account => {
+                const balanceClass = account.balance >= 0 ? 'balance-positive' : 'balance-negative';
+                
+                return `
+                    <div class="account-card">
+                        <div class="quota-header">
+                            <h4>${account.name}</h4>
+                            <div class="transaction-actions">
+                                <button class="icon-btn" onclick="editAccount('${account.id}')" title="Editar" style="color: white;">✏️</button>
+                                <button class="icon-btn" onclick="deleteAccount('${account.id}')" title="Excluir" style="color: white;">❌</button>
+                            </div>
+                        </div>
+                        <div class="account-balance ${balanceClass}">
+                            R$ ${account.balance.toFixed(2).replace('.', ',')}
+                        </div>
+                        <button class="btn" onclick="showAccountDetails('${account.id}')" style="background: rgba(255,255,255,0.2); color: white;">
+                            Ver Detalhes
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Filtrar transações
+        function filterTransactions() {
             const startDate = document.getElementById('filterStartDate').value;
             const endDate = document.getElementById('filterEndDate').value;
-            const type = document.getElementById('filterType').value;
-            const account = document.getElementById('filterAccount').value;
+            const container = document.getElementById('allTransactions');
+            
+            let filteredTransactions = transactions.filter(t => t.type === 'completed');
             
             if (startDate) {
-                transactions = transactions.filter(t => t.date >= startDate);
+                filteredTransactions = filteredTransactions.filter(t => t.date >= startDate);
             }
             
             if (endDate) {
-                transactions = transactions.filter(t => t.date <= endDate);
+                filteredTransactions = filteredTransactions.filter(t => t.date <= endDate);
             }
             
-            if (type) {
-                transactions = transactions.filter(t => t.type === type);
-            }
+            filteredTransactions.sort((a, b) => new Date(b.date) - new Date(a.date));
             
-            if (account) {
-                transactions = transactions.filter(t => t.account === account);
-            }
-            
-            return transactions;
-        }
-
-        function updateFilterOptions() {
-            updateAccountOptions();
-        }
-
-        function applyFilters() {
-            calculateStats();
-            displayAllTransactions();
-        }
-
-        function clearFilters() {
-            document.getElementById('filterStartDate').value = '';
-            document.getElementById('filterEndDate').value = '';
-            document.getElementById('filterType').value = '';
-            document.getElementById('filterAccount').value = '';
-            
-            calculateStats();
-            displayAllTransactions();
-        }
-
-        // Funções de configurações
-        function updateSettingsDisplay() {
-            updateConfigTransactions();
-            updateConfigQuotas();
-            updateConfigAccounts();
-            updateCategoriesListDisplay();
-        }
-
-        function updateConfigTransactions() {
-            const container = document.getElementById('configTransactions');
-            container.innerHTML = '';
-            
-            if (appData.transactions.length === 0) {
-                container.innerHTML = '<p>Nenhuma movimentação cadastrada.</p>';
-                return;
-            }
-            
-            // Mostrar apenas as últimas 20 transações para evitar sobrecarga
-            const recentTransactions = appData.transactions
-                .sort((a, b) => new Date(b.created) - new Date(a.created))
-                .slice(0, 20);
-            
-            recentTransactions.forEach(transaction => {
-                const div = document.createElement('div');
-                div.className = 'config-item';
-                
-                const categoryText = transaction.subcategory ? 
-                    `${transaction.category} - ${transaction.subcategory}` : 
-                    transaction.category;
-                
-                div.innerHTML = `
-                    <div class="config-item-info">
-                        <div class="config-item-name">${transaction.description}</div>
-                        <div class="config-item-desc">${categoryText} - ${formatCurrency(transaction.amount)} - ${formatDate(transaction.date)}</div>
-                    </div>
-                    <div>
-                        <button class="icon-btn" onclick="editTransaction('${transaction.id}')" title="Editar">
-                            ✏️
-                        </button>
-                        <button class="icon-btn" onclick="deleteTransaction('${transaction.id}')" title="Excluir">
-                            ❌
-                        </button>
-                    </div>
-                `;
-                
-                container.appendChild(div);
-            });
-        }
-
-        function updateConfigQuotas() {
-            const container = document.getElementById('configQuotas');
-            container.innerHTML = '';
-            
-            if (appData.quotas.length === 0) {
-                container.innerHTML = '<p>Nenhuma cota cadastrada.</p>';
-                return;
-            }
-            
-            appData.quotas.forEach(quota => {
-                const div = document.createElement('div');
-                div.className = 'config-item';
-                
-                div.innerHTML = `
-                    <div class="config-item-info">
-                        <div class="config-item-name">${quota.name}</div>
-                        <div class="config-item-desc">${formatCurrency(quota.amount)} - ${formatDate(quota.startDate)} a ${formatDate(quota.endDate)}</div>
-                    </div>
-                    <div>
-                        <button class="icon-btn" onclick="editQuota('${quota.id}')" title="Editar">
-                            ✏️
-                        </button>
-                        <button class="icon-btn" onclick="deleteQuota('${quota.id}')" title="Excluir">
-                            ❌
-                        </button>
-                    </div>
-                `;
-                
-                container.appendChild(div);
-            });
-        }
-
-        function updateConfigAccounts() {
-            const container = document.getElementById('configAccounts');
-            container.innerHTML = '';
-            
-            if (appData.accounts.length === 0) {
-                container.innerHTML = '<p>Nenhuma conta cadastrada.</p>';
-                return;
-            }
-            
-            appData.accounts.forEach(account => {
-                const div = document.createElement('div');
-                div.className = 'config-item';
-                
-                div.innerHTML = `
-                    <div class="config-item-info">
-                        <div class="config-item-name">${account.name}</div>
-                        <div class="config-item-desc">${account.bank} - ${getAccountTypeLabel(account.type)}</div>
-                    </div>
-                    <div>
-                        <button class="icon-btn" onclick="editAccount('${account.id}')" title="Editar">
-                            ✏️
-                        </button>
-                        <button class="icon-btn" onclick="deleteAccount('${account.id}')" title="Excluir">
-                            ❌
-                        </button>
-                    </div>
-                `;
-                
-                container.appendChild(div);
-            });
-        }
-
-        function updateCategoriesListDisplay() {
-            const type = document.getElementById('categoryType').value;
-            const container = document.getElementById('categoriesList');
-            
-            container.innerHTML = '';
-            
-            if (appData.categories[type]) {
-                appData.categories[type].forEach((category, index) => {
-                    const div = document.createElement('div');
-                    div.className = 'config-item';
-                    
-                    div.innerHTML = `
-                        <div class="config-item-info">
-                            <div class="config-item-name">${category}</div>
-                            <div class="config-item-desc">Categoria de ${type === 'income' ? 'receita' : 'despesa'}</div>
-                        </div>
-                        <div>
-                            <button class="icon-btn" onclick="deleteCategory('${type}', ${index})" title="Excluir">
-                                ❌
-                            </button>
-                        </div>
-                    `;
-                    
-                    container.appendChild(div);
-                });
-            }
-        }
-
-        function addCustomCategory() {
-            const type = document.getElementById('categoryType').value;
-            const newCategory = document.getElementById('newCategory').value.trim();
-            
-            if (!newCategory) {
-                showToast('Digite o nome da categoria', 'error');
-                return;
-            }
-            
-            if (appData.categories[type].includes(newCategory)) {
-                showToast('Esta categoria já existe', 'error');
-                return;
-            }
-            
-            // Adicionar antes de "Outras"
-            const otherIndex = appData.categories[type].findIndex(cat => 
-                cat.toLowerCase().includes('outras')
-            );
-            
-            if (otherIndex !== -1) {
-                appData.categories[type].splice(otherIndex, 0, newCategory);
-            } else {
-                appData.categories[type].push(newCategory);
-            }
-            
-            // Adicionar subcategorias padrão
-            if (!appData.subcategories[type][newCategory]) {
-                appData.subcategories[type][newCategory] = ['Outras'];
-            }
-            
-            document.getElementById('newCategory').value = '';
-            updateCategoriesListDisplay();
-            updateCategories();
-            saveData();
-            showToast('Categoria adicionada com sucesso!');
-        }
-
-        function deleteCategory(type, index) {
-            const category = appData.categories[type][index];
-            
-            if (category && category.toLowerCase().includes('outras')) {
-                showToast('Não é possível excluir a categoria "Outras"', 'error');
-                return;
-            }
-            
-            if (confirm(`Tem certeza que deseja excluir a categoria "${category}"?`)) {
-                appData.categories[type].splice(index, 1);
-                
-                // Remover subcategorias relacionadas
-                if (appData.subcategories[type][category]) {
-                    delete appData.subcategories[type][category];
-                }
-                
-                updateCategoriesListDisplay();
-                updateCategories();
-                saveData();
-                showToast('Categoria excluída com sucesso!');
-            }
-        }
-
-        function clearAllData() {
-            if (confirm('Tem certeza que deseja limpar todos os dados? Esta ação não pode ser desfeita.')) {
-                if (confirm('ATENÇÃO: Todos os dados serão perdidos permanentemente. Deseja continuar?')) {
-                    localStorage.removeItem('financasAppData');
-                    location.reload();
-                }
-            }
+            displayTransactions(container, filteredTransactions);
         }
 
         // Funções de edição e exclusão
         function editTransaction(id) {
-            const transaction = appData.transactions.find(t => t.id === id);
+            const transaction = transactions.find(t => t.id === id);
             if (!transaction) return;
             
-            showEditModal('Editar Movimentação', createEditTransactionForm(transaction));
-        }
-
-        function editAccount(id) {
-            const account = appData.accounts.find(a => a.id === id);
-            if (!account) return;
+            // Fill form with transaction data
+            document.getElementById('transactionType').value = transaction.category;
+            document.getElementById('amount').value = Math.abs(transaction.amount);
+            document.getElementById('date').value = transaction.date;
+            document.getElementById('description').value = transaction.description;
             
-            showEditModal('Editar Conta', createEditAccountForm(account));
-        }
-
-        function editQuota(id) {
-            const quota = appData.quotas.find(q => q.id === id);
-            if (!quota) return;
+            updateCategories();
+            setTimeout(() => {
+                document.getElementById('category').value = transaction.categoryName;
+                updateSubcategories();
+                setTimeout(() => {
+                    document.getElementById('subcategory').value = transaction.subcategory || '';
+                }, 100);
+            }, 100);
             
-            showEditModal('Editar Cota', createEditQuotaForm(quota));
+            document.getElementById('account').value = transaction.accountId;
+            document.getElementById('quota').value = transaction.quotaId || '';
+            document.getElementById('recurrence').value = transaction.recurrence;
+            
+            // Remove original transaction
+            deleteTransaction(id, false);
+            
+            // Switch to transactions page
+            showPage('movimentacoes');
+            
+            alert('Transação carregada para edição. Modifique os dados e salve novamente.');
         }
 
-        function deleteTransaction(id) {
-            if (confirm('Tem certeza que deseja excluir esta movimentação?')) {
-                appData.transactions = appData.transactions.filter(t => t.id !== id);
-                updateTransactionDisplay();
-                updateQuotasDisplay();
-                updateAccountsDisplay();
-                updateHistoryDisplay();
-                updateSettingsDisplay();
-                saveData();
-                showToast('Movimentação excluída com sucesso!');
-            }
-        }
-
-        function deleteAccount(id) {
-            const hasTransactions = appData.transactions.some(t => t.account === id);
-            if (hasTransactions) {
-                alert('Não é possível excluir uma conta que possui movimentações.');
+        function deleteTransaction(id, confirm = true) {
+            if (confirm && !window.confirm('Tem certeza que deseja excluir esta movimentação?')) {
                 return;
             }
             
-            if (confirm('Tem certeza que deseja excluir esta conta?')) {
-                appData.accounts = appData.accounts.filter(a => a.id !== id);
-                updateAccountOptions();
-                updateAccountsDisplay();
-                updateSettingsDisplay();
-                saveData();
-                showToast('Conta excluída com sucesso!');
+            const transactionIndex = transactions.findIndex(t => t.id === id);
+            if (transactionIndex === -1) return;
+            
+            const transaction = transactions[transactionIndex];
+            
+            // Reverse account balance change if it was a completed transaction
+            if (transaction.type === 'completed') {
+                updateAccountBalance(transaction.accountId, -transaction.amount);
             }
+            
+            // Reverse quota usage if it was an expense
+            if (transaction.quotaId && transaction.amount < 0) {
+                updateQuotaUsed(transaction.quotaId, -Math.abs(transaction.amount));
+            }
+            
+            transactions.splice(transactionIndex, 1);
+            saveData();
+            
+            loadRecentTransactions();
+            loadFutureTransactions();
+            loadAllTransactions();
+            loadQuotasDashboard();
+            loadAccountsDashboard();
+            
+            if (confirm) alert('Movimentação excluída com sucesso!');
+        }
+
+        function editQuota(id) {
+            const quota = quotas.find(q => q.id === id);
+            if (!quota) return;
+            
+            const newName = prompt('Nome da cota:', quota.name);
+            if (!newName) return;
+            
+            const newAmount = parseFloat(prompt('Valor da cota:', quota.amount));
+            if (isNaN(newAmount)) return;
+            
+            quota.name = newName;
+            quota.amount = newAmount;
+            
+            saveData();
+            loadQuotas();
+            loadQuotasDashboard();
+            
+            alert('Cota atualizada com sucesso!');
         }
 
         function deleteQuota(id) {
-            if (confirm('Tem certeza que deseja excluir esta cota?')) {
-                // Remover a cota das transações
-                appData.transactions.forEach(t => {
-                    if (t.quota === id) {
-                        t.quota = null;
-                    }
-                });
-                
-                appData.quotas = appData.quotas.filter(q => q.id !== id);
-                updateQuotaOptions();
-                updateQuotasDisplay();
-                updateSettingsDisplay();
-                saveData();
-                showToast('Cota excluída com sucesso!');
-            }
-        }
-
-        // Funções do modal
-        function showEditModal(title, content) {
-            document.querySelector('.modal-title').textContent = title;
-            document.getElementById('editModalBody').innerHTML = content;
-            document.getElementById('editModal').style.display = 'block';
-        }
-
-        function closeModal() {
-            document.getElementById('editModal').style.display = 'none';
-        }
-
-        function createEditTransactionForm(transaction) {
-            return `
-                <form id="editTransactionForm">
-                    <input type="hidden" id="editTransactionId" value="${transaction.id}">
-                    <div class="form-group">
-                        <label>Tipo</label>
-                        <select id="editTransactionType" required>
-                            <option value="income" ${transaction.type === 'income' ? 'selected' : ''}>Receita</option>
-                            <option value="expense" ${transaction.type === 'expense' ? 'selected' : ''}>Despesa</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Valor (R$)</label>
-                        <input type="number" id="editTransactionAmount" step="0.01" value="${transaction.amount}" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Data</label>
-                        <input type="date" id="editTransactionDate" value="${transaction.date}" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Descrição</label>
-                        <input type="text" id="editTransactionDescription" value="${transaction.description}" required>
-                    </div>
-                    <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; flex-wrap: wrap;">
-                        <button type="button" class="btn" onclick="closeModal()">Cancelar</button>
-                        <button type="submit" class="btn btn-success">Salvar</button>
-                    </div>
-                </form>
-            `;
-        }
-
-        function createEditAccountForm(account) {
-            return `
-                <form id="editAccountForm">
-                    <input type="hidden" id="editAccountId" value="${account.id}">
-                    <div class="form-group">
-                        <label>Nome da Conta</label>
-                        <input type="text" id="editAccountName" value="${account.name}" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Banco</label>
-                        <input type="text" id="editAccountBank" value="${account.bank}" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Tipo de Conta</label>
-                        <select id="editAccountType" required>
-                            <option value="checking" ${account.type === 'checking' ? 'selected' : ''}>Conta Corrente</option>
-                            <option value="savings" ${account.type === 'savings' ? 'selected' : ''}>Poupança</option>
-                            <option value="investment" ${account.type === 'investment' ? 'selected' : ''}>Investimento</option>
-                            <option value="credit" ${account.type === 'credit' ? 'selected' : ''}>Cartão de Crédito</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Saldo Inicial (R$)</label>
-                        <input type="number" id="editAccountBalance" step="0.01" value="${account.initialBalance}" required>
-                    </div>
-                    <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; flex-wrap: wrap;">
-                        <button type="button" class="btn" onclick="closeModal()">Cancelar</button>
-                        <button type="submit" class="btn btn-success">Salvar</button>
-                    </div>
-                </form>
-            `;
-        }
-
-        function createEditQuotaForm(quota) {
-            return `
-                <form id="editQuotaForm">
-                    <input type="hidden" id="editQuotaId" value="${quota.id}">
-                    <div class="form-group">
-                        <label>Nome da Cota</label>
-                        <input type="text" id="editQuotaName" value="${quota.name}" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Valor da Cota (R$)</label>
-                        <input type="number" id="editQuotaAmount" step="0.01" value="${quota.amount}" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Data de Início</label>
-                        <input type="date" id="editQuotaStartDate" value="${quota.startDate}" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Data de Término</label>
-                        <input type="date" id="editQuotaEndDate" value="${quota.endDate}" required>
-                    </div>
-                    <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; flex-wrap: wrap;">
-                        <button type="button" class="btn" onclick="closeModal()">Cancelar</button>
-                        <button type="submit" class="btn btn-success">Salvar</button>
-                    </div>
-                </form>
-            `;
-        }
-
-        // Event delegation para formulários de edição
-        document.addEventListener('submit', function(event) {
-            if (event.target.id === 'editTransactionForm') {
-                event.preventDefault();
-                const id = document.getElementById('editTransactionId').value;
-                const transaction = appData.transactions.find(t => t.id === id);
-                
-                transaction.type = document.getElementById('editTransactionType').value;
-                transaction.amount = parseFloat(document.getElementById('editTransactionAmount').value);
-                transaction.date = document.getElementById('editTransactionDate').value;
-                transaction.description = document.getElementById('editTransactionDescription').value;
-                
-                closeModal();
-                updateTransactionDisplay();
-                updateQuotasDisplay();
-                updateAccountsDisplay();
-                updateHistoryDisplay();
-                updateSettingsDisplay();
-                saveData();
-                showToast('Movimentação atualizada com sucesso!');
-            }
+            if (!confirm('Tem certeza que deseja excluir esta cota?')) return;
             
-            if (event.target.id === 'editAccountForm') {
-                event.preventDefault();
-                const id = document.getElementById('editAccountId').value;
-                const account = appData.accounts.find(a => a.id === id);
-                
-                account.name = document.getElementById('editAccountName').value;
-                account.bank = document.getElementById('editAccountBank').value;
-                account.type = document.getElementById('editAccountType').value;
-                account.initialBalance = parseFloat(document.getElementById('editAccountBalance').value);
-                
-                closeModal();
-                updateAccountOptions();
-                updateAccountsDisplay();
-                updateSettingsDisplay();
-                saveData();
-                showToast('Conta atualizada com sucesso!');
-            }
+            const quotaIndex = quotas.findIndex(q => q.id === id);
+            if (quotaIndex === -1) return;
             
-            if (event.target.id === 'editQuotaForm') {
-                event.preventDefault();
-                const id = document.getElementById('editQuotaId').value;
-                const quota = appData.quotas.find(q => q.id === id);
-                
-                quota.name = document.getElementById('editQuotaName').value;
-                quota.amount = parseFloat(document.getElementById('editQuotaAmount').value);
-                quota.startDate = document.getElementById('editQuotaStartDate').value;
-                quota.endDate = document.getElementById('editQuotaEndDate').value;
-                
-                closeModal();
-                updateQuotaOptions();
-                updateQuotasDisplay();
-                updateSettingsDisplay();
-                saveData();
-                showToast('Cota atualizada com sucesso!');
-            }
-        });
-
-        // Funções de dados
-        function saveData() {
-            localStorage.setItem('financasAppData', JSON.stringify(appData));
+            quotas.splice(quotaIndex, 1);
+            saveData();
+            loadQuotas();
+            loadQuotasDashboard();
+            
+            alert('Cota excluída com sucesso!');
         }
 
-        function loadData() {
-            const saved = localStorage.getItem('financasAppData');
-            if (saved) {
-                try {
-                    const loadedData = JSON.parse(saved);
-                    // Manter estrutura de categorias e subcategorias se não existir
-                    if (!loadedData.subcategories) {
-                        loadedData.subcategories = appData.subcategories;
-                    }
-                    appData = loadedData;
-                } catch (error) {
-                    console.error('Erro ao carregar dados:', error);
-                    showToast('Erro ao carregar dados salvos', 'error');
+        function editAccount(id) {
+            const account = accounts.find(a => a.id === id);
+            if (!account) return;
+            
+            const newName = prompt('Nome da conta:', account.name);
+            if (!newName) return;
+            
+            account.name = newName;
+            
+            saveData();
+            loadAccounts();
+            loadAccountsDashboard();
+            
+            alert('Conta atualizada com sucesso!');
+        }
+
+        function deleteAccount(id) {
+            if (!confirm('Tem certeza que deseja excluir esta conta?')) return;
+            
+            const accountIndex = accounts.findIndex(a => a.id === id);
+            if (accountIndex === -1) return;
+            
+            accounts.splice(accountIndex, 1);
+            saveData();
+            loadAccounts();
+            loadAccountsDashboard();
+            
+            alert('Conta excluída com sucesso!');
+        }
+
+        function showAccountDetails(id) {
+            const account = accounts.find(a => a.id === id);
+            if (!account) return;
+            
+            const accountTransactions = transactions.filter(t => t.accountId === id && t.type === 'completed');
+            const totalTransactions = accountTransactions.length;
+            const totalIncome = accountTransactions.filter(t => t.amount > 0).reduce((sum, t) => sum + t.amount, 0);
+            const totalExpenses = accountTransactions.filter(t => t.amount < 0).reduce((sum, t) => sum + Math.abs(t.amount), 0);
+            
+            alert(`Detalhes da conta: ${account.name}\n\nSaldo atual: R$ ${account.balance.toFixed(2).replace('.', ',')}\nTotal de movimentações: ${totalTransactions}\nTotal de receitas: R$ ${totalIncome.toFixed(2).replace('.', ',')}\nTotal de despesas: R$ ${totalExpenses.toFixed(2).replace('.', ',')}`);
+        }
+
+        // Configurações
+        function showTransactionSettings() {
+            const container = document.getElementById('transactionSettings');
+            const settingsContainer = document.getElementById('settingsTransactions');
+            
+            if (container.style.display === 'none') {
+                container.style.display = 'block';
+                displayTransactions(settingsContainer, transactions.filter(t => t.type === 'completed'));
+            } else {
+                container.style.display = 'none';
+            }
+        }
+
+        function showQuotaSettings() {
+            const container = document.getElementById('quotaSettings');
+            const settingsContainer = document.getElementById('settingsQuotas');
+            
+            if (container.style.display === 'none') {
+                container.style.display = 'block';
+                
+                if (quotas.length === 0) {
+                    settingsContainer.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 20px;">Nenhuma cota cadastrada.</p>';
+                } else {
+                    settingsContainer.innerHTML = quotas.map(quota => `
+                        <div class="transaction-item">
+                            <div class="transaction-info">
+                                <div class="transaction-desc">${quota.name}</div>
+                                <div class="transaction-category">R$ ${quota.amount.toFixed(2).replace('.', ',')} | Usado: R$ ${quota.used.toFixed(2).replace('.', ',')}</div>
+                            </div>
+                            <div class="transaction-actions">
+                                <button class="icon-btn" onclick="editQuota('${quota.id}')" title="Editar">✏️</button>
+                                <button class="icon-btn" onclick="deleteQuota('${quota.id}')" title="Excluir">❌</button>
+                            </div>
+                        </div>
+                    `).join('');
                 }
+            } else {
+                container.style.display = 'none';
             }
         }
 
+        function showAccountSettings() {
+            const container = document.getElementById('accountSettings');
+            const settingsContainer = document.getElementById('settingsAccounts');
+            
+            if (container.style.display === 'none') {
+                container.style.display = 'block';
+                
+                if (accounts.length === 0) {
+                    settingsContainer.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 20px;">Nenhuma conta cadastrada.</p>';
+                } else {
+                    settingsContainer.innerHTML = accounts.map(account => `
+                        <div class="transaction-item">
+                            <div class="transaction-info">
+                                <div class="transaction-desc">${account.name}</div>
+                                <div class="transaction-category">Saldo: R$ ${account.balance.toFixed(2).replace('.', ',')}</div>
+                            </div>
+                            <div class="transaction-actions">
+                                <button class="icon-btn" onclick="editAccount('${account.id}')" title="Editar">✏️</button>
+                                <button class="icon-btn" onclick="deleteAccount('${account.id}')" title="Excluir">❌</button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } else {
+                container.style.display = 'none';
+            }
+        }
+
+        function showCategorySettings() {
+            const container = document.getElementById('categorySettings');
+            container.style.display = container.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Salvar dados
+        function saveData() {
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+            localStorage.setItem('quotas', JSON.stringify(quotas));
+            localStorage.setItem('accounts', JSON.stringify(accounts));
+            
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #10b981;
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                z-index: 1000;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                font-weight: 500;
+            `;
+            toast.textContent = '💾 Dados salvos com sucesso!';
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Exportar dados
         function exportData() {
-            const dataStr = JSON.stringify(appData, null, 2);
+            const data = {
+                transactions,
+                quotas,
+                accounts,
+                exportDate: new Date().toISOString(),
+                version: '1.0'
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
             const dataBlob = new Blob([dataStr], {type: 'application/json'});
-            const url = URL.createObjectURL(dataBlob);
             
             const link = document.createElement('a');
-            link.href = url;
-            link.download = `financas-backup-${new Date().toISOString().split('T')[0]}.json`;
-            document.body.appendChild(link);
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `financas_backup_${new Date().toISOString().split('T')[0]}.json`;
             link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
             
-            showToast('Dados exportados com sucesso!');
+            alert('📤 Dados exportados com sucesso!');
         }
 
+        // Importar dados
         function importData() {
-            document.getElementById('fileInput').click();
-        }
-
-        function handleFileImport(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+            const fileInput = document.getElementById('importFile');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Por favor, selecione um arquivo para importar.');
+                return;
+            }
             
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
-                    const importedData = JSON.parse(e.target.result);
+                    const data = JSON.parse(e.target.result);
                     
-                    if (confirm('Isso substituirá todos os dados atuais. Deseja continuar?')) {
-                        appData = importedData;
-                        updateCategories();
-                        updateAccountOptions();
-                        updateQuotaOptions();
-                        updateFilterOptions();
-                        updateTransactionDisplay();
-                        updateQuotasDisplay();
-                        updateAccountsDisplay();
-                        updateHistoryDisplay();
-                        updateSettingsDisplay();
-                        saveData();
-                        showToast('Dados importados com sucesso!');
-                    }
+                    if (data.transactions) transactions = data.transactions;
+                    if (data.quotas) quotas = data.quotas;
+                    if (data.accounts) accounts = data.accounts;
+                    
+                    saveData();
+                    loadAccounts();
+                    loadQuotas();
+                    loadTransactions();
+                    loadRecentTransactions();
+                    loadFutureTransactions();
+                    loadAllTransactions();
+                    loadQuotasDashboard();
+                    loadAccountsDashboard();
+                    
+                    alert('📥 Dados importados com sucesso!');
+                    fileInput.value = '';
                 } catch (error) {
-                    showToast('Erro ao importar arquivo. Verifique se é um arquivo válido.', 'error');
+                    alert('Erro ao importar dados. Verifique se o arquivo está no formato correto.');
                 }
             };
             reader.readAsText(file);
         }
 
-        // Funções auxiliares
-        function formatCurrency(amount) {
-            return new Intl.NumberFormat('pt-BR', {
-                style: 'currency',
-                currency: 'BRL'
-            }).format(amount);
-        }
-
-        function formatDate(dateString) {
-            return new Date(dateString + 'T00:00:00').toLocaleDateString('pt-BR');
-        }
-
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = `toast ${type} show`;
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-
-        // Fechar modal quando clicar fora
-        window.onclick = function(event) {
-            const modal = document.getElementById('editModal');
-            if (event.target === modal) {
-                closeModal();
+        // Limpar todos os dados
+        function clearAllData() {
+            if (!confirm('⚠️ ATENÇÃO: Esta ação irá apagar TODOS os seus dados permanentemente. Esta ação não pode ser desfeita. Tem certeza?')) {
+                return;
             }
+            
+            if (!confirm('🔥 ÚLTIMA CONFIRMAÇÃO: Todos os dados serão perdidos. Deseja continuar?')) {
+                return;
+            }
+            
+            transactions = [];
+            quotas = [];
+            accounts = [];
+            
+            localStorage.removeItem('transactions');
+            localStorage.removeItem('quotas');
+            localStorage.removeItem('accounts');
+            
+            loadAccounts();
+            loadQuotas();
+            loadRecentTransactions();
+            loadFutureTransactions();
+            loadAllTransactions();
+            loadQuotasDashboard();
+            loadAccountsDashboard();
+            
+            alert('🗑️ Todos os dados foram removidos com sucesso!');
         }
 
-        // Registrar Service Worker para PWA
+        // Auto-save on window unload
+        window.addEventListener('beforeunload', saveData);
+
+        // Hide autocomplete when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.autocomplete-container')) {
+                document.getElementById('quotaSuggestions').style.display = 'none';
+            }
+        });
+        
+        // Service Worker registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
                 navigator.serviceWorker.register('sw.js')
                     .then(function(registration) {
-                        console.log('ServiceWorker registration successful');
+                        console.log('SW registered: ', registration);
                     })
-                    .catch(function(err) {
-                        console.log('ServiceWorker registration failed: ', err);
+                    .catch(function(registrationError) {
+                        console.log('SW registration failed: ', registrationError);
                     });
             });
-        }
-
-        // Função para mostrar detalhes da conta (placeholder)
-        function showAccountDetails(accountId) {
-            showToast('Funcionalidade de detalhamento em desenvolvimento!');
         }
     </script>
 </body>
